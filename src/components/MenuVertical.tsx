@@ -5,9 +5,7 @@ import { useEffect } from 'react';
 import { ItemMenuConfig } from '@/types/ItemMenuConfig';
 import { styled } from '@mui/material';
 
-/**
- * Container principal do menu vertical
- */
+
 export const Container = styled('div')(() => ({
   display: 'flex',
   flexDirection: 'column',
@@ -18,32 +16,41 @@ export const Container = styled('div')(() => ({
   width: '100%',
 }));
 
-/**
- * Props do componente MenuVertical
- */
+
 interface MenuVerticalProps {
-  /**
-   * Lista de itens do menu. Cada item deve seguir a interface `ItemMenuConfig`.
-   */
   listaItemMenu: ItemMenuConfig[];  
 }
 
 /**
- * Componente MenuVertical
+ * Componente de menu vertical que renderiza uma lista de itens de menu
+ * empilhados em coluna utilizando `flexbox`.
  *
- * Renderiza um menu vertical de itens customizáveis. Cada item é passado via `listaItemMenu` como um componente React,
- * e o menu cuida de renderizá-los dentro de um container vertical com espaçamento uniforme.
+ * Os itens são recebidos através da prop `listaItemMenu`, onde cada item
+ * contém um componente React que será clonado internamente para garantir
+ * a atribuição correta da `key`.
  *
+ * O componente utiliza um estado interno (`buttons`) para armazenar os itens
+ * processados e exibe um fallback de carregamento enquanto os componentes
+ * ainda não foram construídos.
  *
- * Exemplo de uso:
+ * @param {ItemMenuConfig[]} listaItemMenu Lista de configurações dos itens de menu que serão renderizados verticalmente.
+ *
+ * @example
  * ```tsx
- * <MenuVertical
- *   
- *   listaItemMenu={[
- *     { component: <Button>Home</Button> },
- *     { component: <Button>Perfil</Button> }
- *   ]}
- * />
+ * import MenuVertical from '@/components/MenuVertical';
+ * import { ItemMenu } from '@/components/ItemMenu';
+ *
+ * const Example = () => {
+ *   return (
+ *     <MenuVertical
+ *       listaItemMenu={[
+ *         { component: <ItemMenu label="Dashboard" href="/dashboard" /> },
+ *         { component: <ItemMenu label="Perfil" href="/perfil" /> },
+ *         { component: <ItemMenu label="Configurações" href="/configuracoes" /> },
+ *       ]}
+ *     />
+ *   );
+ * };
  * ```
  */
 const MenuVertical: React.FC<MenuVerticalProps> = ({

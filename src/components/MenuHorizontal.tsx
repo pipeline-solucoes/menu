@@ -5,9 +5,7 @@ import { useEffect } from 'react';
 import { ItemMenuConfig } from '@/types/ItemMenuConfig';
 import { styled } from '@mui/material';
 
-/**
- * Container principal do menu horizontal
- */
+
 export const Container = styled('div')(() => ({
   display: 'flex',
   flexDirection: 'row',
@@ -18,31 +16,40 @@ export const Container = styled('div')(() => ({
   width: '100%',  
 }));
 
-/**
- * Props do componente MenuHorizontal
- */
 interface MenuHorizontalProps {
-  /**
-   * Lista de itens do menu horizontal. Cada item deve seguir a interface `ItemMenuConfig`.
-   */
   listaItemMenu: ItemMenuConfig[];  
 }
 
 /**
- * Componente MenuHorizontal
+ * Componente de menu horizontal que renderiza uma lista de itens de menu
+ * lado a lado utilizando `flexbox`.
  *
- * Renderiza um menu horizontal de itens customizáveis. Cada item é passado via `listaItemMenu` como um componente React,
- * e o menu cuida de renderizá-los dentro de um container horizontal com espaçamento uniforme.
+ * Os itens são recebidos por meio da prop `listaItemMenu`, onde cada item
+ * contém um componente React que será clonado internamente para garantir
+ * a atribuição correta da `key`.
  *
+ * O componente mantém um estado interno (`buttons`) para armazenar os itens
+ * já processados e renderiza um fallback de carregamento enquanto os itens
+ * ainda não foram construídos.
  *
- * Exemplo de uso:
+ * @param {ItemMenuConfig[]} listaItemMenu Lista de configurações dos itens de menu que serão renderizados horizontalmente.
+ *
+ * @example
  * ```tsx
- * <MenuHorizontal
- *   listaItemMenu={[
- *     { component: <Button>Home</Button> },
- *     { component: <Button>Perfil</Button> }
- *   ]}
- * />
+ * import MenuHorizontal from '@/components/MenuHorizontal';
+ * import { ItemMenu } from '@/components/ItemMenu';
+ *
+ * const Example = () => {
+ *   return (
+ *     <MenuHorizontal
+ *       listaItemMenu={[
+ *         { component: <ItemMenu label="Home" href="/" /> },
+ *         { component: <ItemMenu label="Sobre" href="/sobre" /> },
+ *         { component: <ItemMenu label="Contato" href="/contato" /> },
+ *       ]}
+ *     />
+ *   );
+ * };
  * ```
  */
 const MenuHorizontal: React.FC<MenuHorizontalProps> = ({

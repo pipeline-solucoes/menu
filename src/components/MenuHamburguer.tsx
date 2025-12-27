@@ -7,18 +7,55 @@ import Menu from '@mui/material/Menu';
 import { ItemMenuConfig } from '@/types/ItemMenuConfig';
 import { ReactElement } from 'react';
 import { SvgIconProps, Typography } from '@mui/material';
+import { ColorProps } from '@/types/style/ColorProps';
 
-interface MenuHamburguerProps {    
+interface MenuHamburguerProps extends ColorProps{    
     listaItemMenu?: ItemMenuConfig[];
-    background_color?: string; 
-    color: string;     
+    background?: string; 
+    colorText: string;     
     imageHamburguer: () => ReactElement<HTMLImageElement> | ReactElement<SvgIconProps>;    
 }
 
+/**
+ * Componente de menu hamburguer responsivo que exibe um `IconButton` e, ao clicar,
+ * abre um `Menu` do Material UI contendo itens configuráveis via `listaItemMenu`.
+ *
+ * O menu é exibido apenas em telas pequenas (xs) e ocultado em telas médias ou maiores (md+),
+ * seguindo a regra definida em `sx`.
+ *
+ * Quando um item renderizado for um componente do tipo `ItemMenu` (identificado por `type.typeName === "ItemMenu"`),
+ * o componente injeta automaticamente a prop `afterClick` para fechar o menu ao clicar no item.
+ *
+ * @param {ItemMenuConfig[]} [listaItemMenu] Lista de itens de menu (componentes) a serem renderizados dentro do menu.
+ * @param {string} [background='transparent'] Cor/fundo do container interno do menu (aplicado em `backgroundColor`).
+ * @param {string} colorText Cor do texto exibido no fallback "carregando..." quando não há itens na lista.
+ * @param {() => React.ReactElement<HTMLImageElement> | React.ReactElement<SvgIconProps>} imageHamburguer Função que retorna o elemento visual do botão (imagem ou ícone MUI) exibido dentro do `IconButton`.
+ *
+ * @example
+ * ```tsx
+ * import MenuHamburguer from '@/components/MenuHamburguer';
+ * import MenuIcon from '@mui/icons-material/Menu';
+ * import { ItemMenu } from '@/components/ItemMenu';
+ *
+ * const Example = () => {
+ *   return (
+ *     <MenuHamburguer
+ *       background="#ffffff"
+ *       colorText="#111"
+ *       imageHamburguer={() => <MenuIcon />}
+ *       listaItemMenu={[
+ *         { component: <ItemMenu label="Home" href="/" /> },
+ *         { component: <ItemMenu label="Sobre" href="/sobre" /> },
+ *       ]}
+ *     />
+ *   );
+ * };
+ * ```
+ */
 const MenuHamburguer: React.FC<MenuHamburguerProps> = ({
     listaItemMenu, 
-    background_color = "transparent",
-    color,       
+    background = "transparent",
+    colorText,       
     imageHamburguer
 }) => {
 
@@ -63,7 +100,7 @@ const MenuHamburguer: React.FC<MenuHamburguerProps> = ({
             <Box
               display="flex"
               flexDirection="column"
-              sx={{ padding: "24px", gap: "16px", backgroundColor: background_color }}
+              sx={{ padding: "24px", gap: "16px", backgroundColor: background }}
             >
               { listaItemMenu && listaItemMenu.length > 0 
                   ? (
@@ -83,7 +120,7 @@ const MenuHamburguer: React.FC<MenuHamburguerProps> = ({
 
                         return React.cloneElement(el, { key: index }); })
                     )                       
-                  : ( <Typography variant='body1' component="div" color={color}>carregando...</Typography> )
+                  : ( <Typography variant='body1' component="div" color={colorText}>carregando...</Typography> )
               }              
             </Box>
           </nav>

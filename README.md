@@ -10,12 +10,28 @@ Este pacote faz parte do ecossistema de componentes da **Pipeline Soluções**.
 
 A biblioteca inclui os seguintes componentes:
 
-- **TermsAndPrivacyBar**  
-  
+- **BarraFerramentas** 
+  Componente que renderiza uma barra de ferramentas (Toolbar) do Material UI com layout em grid
+  dividido em três áreas: esquerda, meio e direita. Cada área é renderizada via funções
+  `renderLeft`, `renderMiddle` e `renderRigth`.
 
-- **TermsAndPrivacyCard**  
-  Componente que renderiza um card flutuante (fixed) para consentimento de cookies, exibindo links para **Termos de Uso** e **Política de Privacidade** e dois botões:
-  **Cancelar** (define cookieConsent como "false") e **Ok** (define cookieConsent como "true").
+- **ItemMenu** 
+
+- **MenuHamburguer** 
+  Componente de menu hamburguer responsivo que exibe um `IconButton` e, ao clicar, abre um `Menu` do Material UI contendo itens configuráveis via `listaItemMenu`. 
+
+- **MenuHorizontal**
+  Componente de menu horizontal que renderiza uma lista de itens de menu lado a lado utilizando `flexbox`.
+
+- **MenuVertical**
+  Componente de menu vertical que renderiza uma lista de itens de menu empilhados em coluna utilizando `flexbox`.
+
+- **SideNav**
+
+- **DrawerResponsive**
+  DrawerResponsive é um layout de navegação responsivo que:
+  - Em telas pequenas (xs/sm) usa o `MobileMiniDrawerLayout` (header + bottom navigation);
+  - Em telas médias ou maiores (md+) usa o `DesktopMiniDrawerLayout` (AppBar + Drawer). 
 
 ---
 
@@ -43,15 +59,7 @@ yarn add @pipelinesolucoes/menu
 ## 🚀 Uso básico
 
 ```
-import { Actionmenu } from "@pipelinesolucoes/menu";
 
-export function Example() {
-  return (
-    <Actionmenu variant="contained" color="primary">
-      Ação
-    </Actionmenu>
-  );
-}
 ```
 
 ## 🧩 Uso em Design Systems
