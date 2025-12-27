@@ -1,7 +1,5 @@
 
 export { default as BarraFerramentas} from './components/BarraFerramentas';
-export { default as BarraFerramentasSaaS} from './components/BarraFerramentasSaaS';
-export { default as BarraFerramentasHamburguer} from './components/BarraFerramentasHamburguer';
 export { default as MenuHorizontal} from './components/MenuHorizontal';
 export { default as MenuHamburguer} from './components/MenuHamburguer';
 export { default as ItemMenu} from './components/ItemMenu';

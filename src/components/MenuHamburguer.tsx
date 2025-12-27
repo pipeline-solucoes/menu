@@ -4,10 +4,9 @@ import * as React from 'react';
 import Box from '@mui/material/Box';
 import IconButton from '@mui/material/IconButton';
 import Menu from '@mui/material/Menu';
-import { SpanBody1 } from './BarraFerramentasStyled';
 import { ItemMenuConfig } from '@/types/ItemMenuConfig';
 import { ReactElement } from 'react';
-import { SvgIconProps } from '@mui/material';
+import { SvgIconProps, Typography } from '@mui/material';
 
 interface MenuHamburguerProps {    
     listaItemMenu?: ItemMenuConfig[];
@@ -84,7 +83,7 @@ const MenuHamburguer: React.FC<MenuHamburguerProps> = ({
 
                         return React.cloneElement(el, { key: index }); })
                     )                       
-                  : ( <SpanBody1 text_color={color}>carregando...</SpanBody1> )
+                  : ( <Typography variant='body1' component="div" color={color}>carregando...</Typography> )
               }              
             </Box>
           </nav>

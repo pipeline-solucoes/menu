@@ -1,74 +1,48 @@
 'use client';
 
 import * as React from 'react';
-import { Bar, ContainerRedeSocialHorizontal, CustomToolbar, SpanBody1 } from './BarraFerramentasStyled';
-import { ItemMenuConfig } from '@/types/ItemMenuConfig';
+import { Bar, CustomToolbar } from './BarraFerramentasStyled';
 import { styled } from '@mui/material';
 
-interface BarraFerramentasProps {    
-    listaItemMenu: ItemMenuConfig[];   
+interface BarraFerramentasProps {          
     background_color?: string;
-    color: string;    
-    color_hover: string;    
-    text_decoration: 'none' | 'underline';
-    renderLogo: () => React.ReactElement;    
-    renderSocialMedia: () => React.ReactElement;    
+    maxWidth?: string;            
+    renderLeft: () => React.ReactElement;    
+    renderMiddle: () => React.ReactElement;    
+    renderRigth: () => React.ReactElement;    
 }
 
 const DivStyled = styled('div')({
-  display: 'flex',
-  flex: '1',
-});
-
-const ContainerMenuHorizontal = styled('div')({
-  display: 'flex',
-  flexDirection: 'row',
-  justifyContent: 'center',
+  display: 'grid',
+  gridTemplateColumns: 'auto 1fr auto',
   alignItems: 'center',
-  flexGrow: 1,
-  gap: '16px',
+  width: '100%',
+  heigth: '100%',
 });
 
-const BarraFerramentas: React.FC<BarraFerramentasProps> = ({
-    listaItemMenu,
-    renderLogo, 
-    renderSocialMedia, 
-    background_color, color, color_hover, 
-    text_decoration
+const BarraFerramentas: React.FC<BarraFerramentasProps> = ({    
+    renderLeft, 
+    renderMiddle,
+    renderRigth, 
+    maxWidth = '1200px',
+    background_color = "transparent",
 }) => {
 
-  const background_color_bar = background_color || 'transparent';
-  const [buttons, setButtons] = React.useState<React.ReactNode[] | null>(null);
-      
-  React.useEffect(() => {
-      const borderColor = (text_decoration === 'none') ? 'transparent' : color;
-
-      if (listaItemMenu) {
-          const constructedButtons = listaItemMenu.map((item) => (
-              item.component
-          ));
-          setButtons(constructedButtons);
-      }
-  }, [listaItemMenu, color, color_hover, text_decoration]);
-
   return (
-    <Bar background_color={background_color_bar} id="barraferramentas">
-      <CustomToolbar disableGutters>
-        {renderLogo()}
+    <Bar background_color={background_color} id="barraferramentas">
+      <CustomToolbar disableGutters maxWidth={maxWidth}>        
         <DivStyled>
-          <ContainerMenuHorizontal>
-            <nav>
-              {buttons ? buttons : <SpanBody1 text_color={color}>carregando...</SpanBody1>}
-            </nav>
-          </ContainerMenuHorizontal>
-          <ContainerRedeSocialHorizontal>
-            {renderSocialMedia()}
-          </ContainerRedeSocialHorizontal>
+          {renderLeft()}
+          {renderMiddle()}
+          {renderRigth()}
         </DivStyled>
       </CustomToolbar>
     </Bar>
   );
 }
+
+BarraFerramentas.displayName = "BarraFerramentas"; // para DevTools
+(BarraFerramentas as any).typeName = "BarraFerramentas"; // para seu código
 
 export default BarraFerramentas;
 
