@@ -7,3 +7,4 @@ e este projeto adota [Versionamento Semântico](https://semver.org/lang/pt-BR/).
 ## [1.0.0] - 2025-12-27
 
 - Criação do Package.
+- Padronizacao das props do componente ItemMenu.

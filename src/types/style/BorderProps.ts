@@ -2,5 +2,6 @@
 export interface BorderProps {
   borderRadius?: string;
   border?: string;
+  borderColor?: string;
   boxShadow?: string;
 }

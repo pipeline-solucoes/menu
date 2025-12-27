@@ -2,6 +2,9 @@
 
 import React from 'react';
 import { styled } from '@mui/material';
+import { ColorProps } from '../types/style/ColorProps';
+import { BorderProps } from '../types/style/BorderProps';
+import { LayoutProps } from '../types/style/LayoutProps';
 
 const ButtonStyled = styled('a', {
   shouldForwardProp: (prop) =>
@@ -60,24 +63,51 @@ const ButtonStyled = styled('a', {
   },
 }));
 
-interface ItemMenuProps {  
+interface ItemMenuProps extends ColorProps, BorderProps, LayoutProps {  
   url: string;
   aria_label: string;
-  background_color?: string;
-  background_color_hover?: string;
-  color: string;
-  color_hover?: string; 
-  border_color?: string;
-  border_radius?: string;
+  background?: string;
+  backgroundHover?: string;
+  colorText: string;
+  colorTextHover?: string; 
+  borderColor?: string;
+  borderRadius?: string;
   text_decoration: 'none' | 'underline';  
   layout: 'button' | 'link';
   width: string;
   margin?: string;
+  padding? : string;
   children: React.ReactNode;  
   afterClick?: () => void;
 }
 
 /**
+ * Componente de item de menu baseado em `<a>` estilizado via Material UI `styled`.
+ * Renderiza um link com aparência de **botão** ou **link**, aplicando estilos de fundo, texto,
+ * borda e hover, além de suportar comportamento de **scroll suave** para âncoras.
+ *
+ * Regras de navegação:
+ * - Se `url` contém `"http"`, abre como link externo (com `target="_blank"` e `rel="noopener noreferrer"`).
+ * - Se `url` contém `"/#"` ou começa com `"/"`, renderiza como link interno padrão (sem interceptar o clique).
+ * - Caso contrário, assume âncora (ex.: `"#section"`) e faz `scrollIntoView` suave; se `afterClick` existir,
+ *   chama primeiro `afterClick()` e aplica um `setTimeout` para evitar reflow pesado antes do scroll.
+ *
+ * @param {string} url URL de destino. Pode ser externa (`https://...`), interna (`/rota` ou `/#secao`) ou âncora (`#secao`). Obrigatório.
+ * @param {string} aria_label Rótulo de acessibilidade aplicado em `aria-label`. Obrigatório.
+ * @param {string} [background='transparent'] Cor de fundo (CSS) do item no estado normal.
+ * @param {string} [backgroundHover=background] Cor de fundo (CSS) no hover. Por padrão, herda o valor de `background`.
+ * @param {string} colorText Cor do texto (CSS) no estado normal. Obrigatório.
+ * @param {string} [colorTextHover=colorText] Cor do texto (CSS) no hover. Por padrão, herda `colorText`.
+ * @param {string} [borderColor='transparent'] Cor da borda (CSS). Se `text_decoration="underline"`, a borda padrão fica transparente.
+ * @param {string} [borderRadius='0px'] Raio da borda (CSS).
+ * @param {'none' | 'underline'} [text_decoration='none'] Controla o estilo de “sublinhado” no hover via `borderBottom`.
+ * @param {'button' | 'link'} layout Define o layout visual: em `'button'` aplica `padding`; em `'link'` usa `padding` `'0px'`. Obrigatório.
+ * @param {string} width Largura do item (CSS). Obrigatório.
+ * @param {string} [margin='0px'] Margem (CSS) aplicada ao item.
+ * @param {string} [padding='8px 24px'] Padding (CSS) quando `layout="button"`. Quando `layout="link"`, o padding efetivo é `'0px'`.
+ * @param {React.ReactNode} children Conteúdo interno do item (texto, Typography, ícones etc.). Obrigatório.
+ * @param {() => void} [afterClick] Callback opcional disparado antes do scroll (quando âncora) para permitir fechar o menu/rodar ações adicionais.
+ *
  * IMPORTANTE:
  * 
  * Todo componente estilizado criado no projeto principal que for usado no menu
@@ -87,20 +117,47 @@ interface ItemMenuProps {
  * 
  * Isso garante que a lib consiga identificar o componente corretamente e
  * injetar o `afterClick` para fechar o menu ou executar ações adicionais.
+ * 
+ * 
+ *
+ * @example
+ * ```tsx
+ *  const ItemMenuCustom: React.FC<ItemMenuCustomProps> = ({rota, otherPage = "true", afterClick }) => {            
+ *      const theme = useTheme();
+ *      const url = (rota.url == "/") ? rota.url : ( (otherPage && rota.url.indexOf("/") == -1) ? `/${rota.url}` : rota.url );
+ *      
+ *      return(
+ *          <ItemMenu 
+ *              key={url}            
+ *              width='auto'
+ *              url={url} 
+ *              color={theme.palette.text.primary} 
+ *              color_hover={theme.palette.primary.main} 
+ *              text_decoration="none"             
+ *              aria_label={'menu ' + rota.caption}
+ *              layout= 'link'
+ *              afterClick={afterClick}     
+ *          >
+ *              <Typography variant='subtitle1' component="span">{rota.caption}</Typography>
+ *          </ItemMenu>      
+ *      );         
+ *  };
+ *  (ItemMenuCustom as any).typeName = "ItemMenu";
+ *  export default ItemMeuCustom;
  */
 
 const ItemMenu: React.FC<ItemMenuProps> = ({ 
-  url, aria_label, background_color, background_color_hover,
-  color, color_hover, border_radius, border_color, text_decoration = 'none',
-  layout, width, margin, children, afterClick }) => {
+  url, aria_label, background, backgroundHover,
+  colorText, colorTextHover, borderRadius, borderColor, text_decoration = 'none',
+  layout, width, margin, padding = '8px 24px', children, afterClick }) => {
   
-  const backgroundColor = background_color ?? 'transparent';
-  const backgroundColorHover = background_color_hover ?? backgroundColor;
-  const colorHover = color_hover ?? color;    
-  const borderRadius = border_radius ?? '0px';
-  const padding = layout == 'button' ? '8px 24px' : '0px';
-  const borderColor = text_decoration == 'underline' ? 'transparent' : (border_color ?? 'transparent');
-  const borderColorUnderline = (text_decoration == 'underline') ? color : (border_color ?? 'transparent');
+  const backgroundColor = background ?? 'transparent';
+  const backgroundColorHover = backgroundHover ?? backgroundColor;
+  const colorHover = colorTextHover ?? colorText;    
+  const border_radius = borderRadius ?? '0px';
+  const paddingLayout = layout == 'button' ? padding : '0px';
+  const border_color = text_decoration == 'underline' ? 'transparent' : (borderColor ?? 'transparent');
+  const borderColorUnderline = (text_decoration == 'underline') ? colorText : (borderColor ?? 'transparent');
   const marginButton = margin ?? '0px'; 
   
   const handleClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
@@ -127,12 +184,12 @@ const ItemMenu: React.FC<ItemMenuProps> = ({
         width={width}
         background_color={backgroundColor}
         background_color_hover={backgroundColorHover}
-        color={color} 
+        color={colorText} 
         color_hover={colorHover}
-        border_radius={borderRadius}
-        border_color={borderColor}
+        border_radius={border_radius}
+        border_color={border_color}
         border_color_underline={borderColorUnderline}
-        padding={padding}
+        padding={paddingLayout}
         margin={marginButton}
         aria-label={aria_label}  
         target="_blank"
@@ -149,12 +206,12 @@ const ItemMenu: React.FC<ItemMenuProps> = ({
         width={width}
         background_color={backgroundColor}
         background_color_hover={backgroundColorHover}
-        color={color} 
+        color={colorText} 
         color_hover={colorHover}
-        border_radius={borderRadius}
-        border_color={borderColor}
+        border_radius={border_radius}
+        border_color={border_color}
         border_color_underline={borderColorUnderline}
-        padding={padding}
+        padding={paddingLayout}
         margin={marginButton}
         aria-label={aria_label}              
       >
@@ -170,12 +227,12 @@ const ItemMenu: React.FC<ItemMenuProps> = ({
         width={width}
         background_color={backgroundColor}
         background_color_hover={backgroundColorHover}
-        color={color} 
+        color={colorText} 
         color_hover={colorHover}
-        border_radius={borderRadius}
-        border_color={borderColor}
+        border_radius={border_radius}
+        border_color={border_color}
         border_color_underline={borderColorUnderline}
-        padding={padding}
+        padding={paddingLayout}
         margin={marginButton}
         aria-label={aria_label}              
       >

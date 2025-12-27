@@ -16,6 +16,8 @@ A biblioteca inclui os seguintes componentes:
   `renderLeft`, `renderMiddle` e `renderRigth`.
 
 - **ItemMenu** 
+  Componente de item de menu baseado em `<a>` estilizado via Material UI `styled`.
+  Renderiza um link com aparência de **botão** ou **link**, aplicando estilos de fundo, texto, borda e hover, além de suportar comportamento de **scroll suave** para âncoras.
 
 - **MenuHamburguer** 
   Componente de menu hamburguer responsivo que exibe um `IconButton` e, ao clicar, abre um `Menu` do Material UI contendo itens configuráveis via `listaItemMenu`. 
