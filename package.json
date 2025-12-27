@@ -1,6 +1,17 @@
 {
-  "name": "pipesol-menu",
-  "version": "1.0.12-beta.02",
+  "name": "@pipelinesolucoes/menu",
+  "version": "1.0.0-beta.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/pipeline-solucoes/menu.git"
+  },
+  "homepage": "https://github.com/pipeline-solucoes/menu#readme",
+  "bugs": {
+    "url": "https://github.com/pipeline-solucoes/menu/issues"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
   "main": "dist/index.js",
   "module": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -18,8 +29,7 @@
     "prepare": "npm run build",
     "start": "next start",
     "lint": "next lint",
-    "release-beta": "npm run build && npm publish --tag beta",
-    "release": "npm run build && npm publish"
+    "release-beta": "npm run build && npm publish --tag beta"  
   },
  "peerDependencies": {
     "@emotion/react": "^11.14.0",
@@ -42,9 +52,9 @@
     "@types/react-dom": "^19",
     "@types/react-input-mask": "^3.0.6",
     "eslint": "^9",
-    "eslint-config-next": "15.1.6",
-    "framer-motion": "^12.9.4",
-    "next": "^15.2.3",    
+    "eslint-config-next": "15.1.6", 
+    "framer-motion": "^12.9.4",   
+    "next": "^16.0.7",    
     "typescript": "^5"
   }
 }
