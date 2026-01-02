@@ -2,8 +2,7 @@
 
 import * as React from 'react';
 import { styled, Toolbar } from '@mui/material';
-import { ColorProps } from '../types/style/ColorProps';
-import { LayoutProps } from '../types/style/LayoutProps';
+import { ColorProps, LayoutProps } from '@pipelinesolucoes/theme';
 
 interface BarraFerramentasProps extends ColorProps, LayoutProps {          
     background?: string;

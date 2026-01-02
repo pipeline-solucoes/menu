@@ -1,6 +1,6 @@
 // UserAvatarMenu.tsx
 import React from 'react';
-import { Box, MenuItem, Typography } from '@mui/material';
+import { Box, MenuItem } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import { LogoutIcon } from './LogoutIcon';
 import { AvatarMenuItem } from '@/types/Drawer';

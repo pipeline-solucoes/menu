@@ -7,7 +7,8 @@ import Menu from '@mui/material/Menu';
 import { ItemMenuConfig } from '@/types/ItemMenuConfig';
 import { ReactElement } from 'react';
 import { SvgIconProps, Typography } from '@mui/material';
-import { ColorProps } from '@/types/style/ColorProps';
+import { ColorProps } from '@pipelinesolucoes/theme';
+
 
 interface MenuHamburguerProps extends ColorProps{    
     listaItemMenu?: ItemMenuConfig[];

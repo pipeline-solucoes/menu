@@ -74,7 +74,7 @@ interface SideNavProps {
   renderTopMenu?: ReactNode;
 }
 
-const Container = styled('div')(({ theme }) => ({                       
+const Container = styled('div')(() => ({                       
   display: 'grid',      
   gridTemplateColumns: 'auto 1fr',    
   width: "100%", 

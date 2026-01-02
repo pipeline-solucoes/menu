@@ -1,6 +1,7 @@
 {
   "name": "@pipelinesolucoes/menu",
-  "version": "1.0.0",
+  "version": "1.0.1-beta.0",
+  "license": "UNLICENSED",
   "repository": {
     "type": "git",
     "url": "https://github.com/pipeline-solucoes/menu.git"
@@ -20,8 +21,14 @@
   ],
   "exports": {
     ".": {
+      "types": "./dist/index.d.ts",
       "import": "./dist/index.js",
       "require": "./dist/index.js"
+    },
+    "./mui-theme": {
+      "types": "./dist/mui-theme.d.ts",
+      "import": "./dist/mui-theme.js",
+      "require": "./dist/mui-theme.js"
     }
   },
   "scripts": {
@@ -29,9 +36,10 @@
     "prepare": "npm run build",
     "start": "next start",
     "lint": "next lint",
-    "release-beta": "npm run build && npm publish --tag beta"  
+    "release-theme-beta": "npm uninstall @pipelinesolucoes/theme && npm install @pipelinesolucoes/theme@beta",
+    "release-theme": "npm uninstall @pipelinesolucoes/theme && npm install @pipelinesolucoes/theme"
   },
- "peerDependencies": {
+  "peerDependencies": {
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.1",
     "@mui/icons-material": "^6.4.4 || ^7.3.0",
@@ -52,9 +60,12 @@
     "@types/react-dom": "^19",
     "@types/react-input-mask": "^3.0.6",
     "eslint": "^9",
-    "eslint-config-next": "15.1.6", 
-    "framer-motion": "^12.9.4",   
-    "next": "^16.0.7",    
+    "eslint-config-next": "15.1.6",
+    "framer-motion": "^12.9.4",
+    "next": "^16.0.7",
     "typescript": "^5"
+  },
+  "dependencies": {
+    "@pipelinesolucoes/theme": "^1.0.7-beta.3"
   }
 }

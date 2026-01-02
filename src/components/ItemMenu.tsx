@@ -2,9 +2,8 @@
 
 import React from 'react';
 import { styled } from '@mui/material';
-import { ColorProps } from '../types/style/ColorProps';
-import { BorderProps } from '../types/style/BorderProps';
-import { LayoutProps } from '../types/style/LayoutProps';
+import { BorderProps, ColorProps, LayoutProps } from '@pipelinesolucoes/theme';
+
 
 const ButtonStyled = styled('a', {
   shouldForwardProp: (prop) =>
@@ -66,17 +65,20 @@ const ButtonStyled = styled('a', {
 interface ItemMenuProps extends ColorProps, BorderProps, LayoutProps {  
   url: string;
   aria_label: string;
+
   background?: string;
   backgroundHover?: string;
   colorText: string;
   colorTextHover?: string; 
   borderColor?: string;
   borderRadius?: string;
-  text_decoration: 'none' | 'underline';  
-  layout: 'button' | 'link';
   width: string;
   margin?: string;
   padding? : string;
+
+  text_decoration: 'none' | 'underline';  
+  layout: 'button' | 'link';
+
   children: React.ReactNode;  
   afterClick?: () => void;
 }
@@ -155,10 +157,12 @@ const ItemMenu: React.FC<ItemMenuProps> = ({
   const backgroundColorHover = backgroundHover ?? backgroundColor;
   const colorHover = colorTextHover ?? colorText;    
   const border_radius = borderRadius ?? '0px';
+  const marginButton = margin ?? '0px'; 
+
   const paddingLayout = layout == 'button' ? padding : '0px';
   const border_color = text_decoration == 'underline' ? 'transparent' : (borderColor ?? 'transparent');
   const borderColorUnderline = (text_decoration == 'underline') ? colorText : (borderColor ?? 'transparent');
-  const marginButton = margin ?? '0px'; 
+
   
   const handleClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
 

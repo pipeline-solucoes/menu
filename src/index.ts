@@ -11,7 +11,4 @@ export { default as IconDrawerTrigger } from './components/drawer/IconDrawerTrig
 export type { ItemMenuConfig } from './types/ItemMenuConfig';
 export type { RotaMenuConfig } from './types/RotaMenuConfig';
 export type { NavItem } from './types/NavItem';
-export type { BorderProps } from "./types/style/BorderProps";
-export type { ColorProps } from "./types/style/ColorProps";
-export type { LayoutProps } from "./types/style/LayoutProps";
 
