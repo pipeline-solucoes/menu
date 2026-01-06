@@ -4,6 +4,7 @@ import { Box, MenuItem } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import { LogoutIcon } from './LogoutIcon';
 import { AvatarMenuItem } from '@/types/Drawer';
+import { useConfirmMessage } from '@pipelinesolucoes/notification';
 
 
 export interface UserAvatarMenuProps {
@@ -110,6 +111,8 @@ const UserAvatarMenu: React.FC<UserAvatarMenuProps> = ({
   noUserLabel = 'Nenhum usuário logado',
   noEmailLabel = 'Email não cadastrado',
 }) => {
+
+  const { confirm, ConfirmMessagePortal } = useConfirmMessage();
   const hasMenuItems = Boolean(menuItems && menuItems.length > 0);
 
 
@@ -117,6 +120,17 @@ const UserAvatarMenu: React.FC<UserAvatarMenuProps> = ({
   const handleClickLogout = async () => {
     setErrorMsg(null);    
     try {
+
+      const accepted = await confirm({
+        message: 'Deseja realmente sair?',        
+        confirmLabel: 'Ok',
+        cancelLabel: 'Cancelar',                        
+        closeOnBackdropClick: true,
+        closeOnEsc: true,
+      });
+
+      if (!accepted) return;
+
       window.location.href = endPointLogout      
     } catch (e) {
       setErrorMsg('Ocorreu um erro no logout.');
@@ -149,6 +163,8 @@ const UserAvatarMenu: React.FC<UserAvatarMenuProps> = ({
       >
         <LogoutIcon sx={{ fontSize: 20 }} /> Sair
       </MenuItem>
+
+      {ConfirmMessagePortal}
     </Root>
   );
 };

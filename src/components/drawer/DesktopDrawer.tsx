@@ -20,6 +20,7 @@ import { DrawerProps } from '@/types/Drawer';
 import { LogoutIcon } from './LogoutIcon';
 import IconDrawerTrigger from './IconDrawerTrigger';
 import UserAvatarMenu from './UserAvatarMenu';
+import { useConfirmMessage } from '@pipelinesolucoes/notification';
 
 const drawerWidth = 240;
 
@@ -204,7 +205,10 @@ const DesktopDrawer: React.FC<DrawerProps> = ({
   loadingMessage,
   loadingColor,
 }) => {
+
   const theme = useTheme();
+  const { confirm, ConfirmMessagePortal } = useConfirmMessage();
+  
   const [open, setOpen] = React.useState(false);
 
   //garante que só chamamos onUnauthenticated uma única vez
@@ -235,7 +239,19 @@ const DesktopDrawer: React.FC<DrawerProps> = ({
   const handleClickLogout = async () => {
     setErrorMsg(null);
     try {
+      
+      const accepted = await confirm({
+        message: 'Deseja realmente sair?',        
+        confirmLabel: 'Ok',
+        cancelLabel: 'Cancelar',                        
+        closeOnBackdropClick: true,
+        closeOnEsc: true,
+      });
+
+      if (!accepted) return;
+
       window.location.href = endPointLogout;
+
     } catch (e) {
       setErrorMsg('Ocorreu um erro no logout.');
     }
@@ -346,7 +362,7 @@ const DesktopDrawer: React.FC<DrawerProps> = ({
                 <ListItemText primary="Sair" sx={{ opacity: open ? 1 : 0 }} />
               </ListItemButton>
             </ListItem>
-          </List>
+          </List>          
         </Drawer>
 
         <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
@@ -355,6 +371,8 @@ const DesktopDrawer: React.FC<DrawerProps> = ({
             <Typography>Selecione um item do menu.</Typography>
           )}
         </Box>
+
+        {ConfirmMessagePortal}
       </Box>
 
       {loading && (

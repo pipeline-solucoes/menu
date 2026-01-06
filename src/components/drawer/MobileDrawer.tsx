@@ -13,6 +13,7 @@ import MuiAppBar from '@mui/material/AppBar';
 import { DrawerProps, MenuItemDrawer } from '@/types/Drawer';
 import IconDrawerTrigger from './IconDrawerTrigger';
 import UserAvatarMenu from './UserAvatarMenu';
+import { useConfirmMessage } from '@pipelinesolucoes/notification';
 
 const StyledHeader = styled(MuiAppBar, {
   shouldForwardProp: (prop) => prop !== 'backgroundHeader',
@@ -167,7 +168,7 @@ const MobileDrawer: React.FC<DrawerProps> = ({
 }) => {
   
   //garante que só chamamos onUnauthenticated uma única vez
-    const hasFiredUnauth = React.useRef(false);
+  const hasFiredUnauth = React.useRef(false);
   
     React.useEffect(() => {
       // só dispara quando já terminou o loading
