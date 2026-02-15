@@ -367,7 +367,7 @@ const DesktopDrawer: React.FC<DrawerProps> = ({
 
         <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
           <DrawerHeader />
-          {menuItems[selectedIndex]?.component ?? (
+          {menuItems[selectedIndex ?? 0]?.component ?? (
             <Typography>Selecione um item do menu.</Typography>
           )}
         </Box>

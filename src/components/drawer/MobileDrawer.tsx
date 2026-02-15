@@ -240,7 +240,7 @@ const MobileDrawer: React.FC<DrawerProps> = ({
             overflowY: 'auto', // <- scroll fica só aqui
           }}
         >
-          {menuItems[selectedIndex]?.component ?? (
+          {menuItems[selectedIndex ?? 0]?.component ?? (
             <Typography variant="body1">Selecione um item do menu.</Typography>
           )}
         </Box>
