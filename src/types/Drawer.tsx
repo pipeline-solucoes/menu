@@ -58,7 +58,7 @@ export interface DrawerProps {
   emailUsuario: string;
   menuItems: MenuItemDrawer[];
   avatarMenuItems: AvatarMenuItem[];
-  selectedIndex: number;
+  selectedIndex?: number;
   onChangeIndex: (index: number) => void;
   onUnauthenticated?: () => void;
   toolbarContent?: React.ReactNode;  

@@ -96,12 +96,13 @@ const DrawerResponsive: React.FC<DrawerProps> = ({
   loadingMessage,
   loadingColor = '#ffffff',
   onChangeIndex,
+  selectedIndex = 0
 }) => {
   const defaultAvatar = '/nofoto.jpg';
   const avatarSrc =
     profileImage && profileImage.trim() !== '' ? profileImage : defaultAvatar;
 
-  const [selectedIndex, setSelectedIndex] = React.useState(0);
+  const [selected_index, setSelectedIndex] = React.useState(selectedIndex);
 
   const handleChangeIndex = (index: number) => {
     setSelectedIndex(index);
@@ -126,7 +127,7 @@ const DrawerResponsive: React.FC<DrawerProps> = ({
         emailUsuario={emailUsuario}
         menuItems={menuItems}
         avatarMenuItems={avatarMenuItems}
-        selectedIndex={selectedIndex}
+        selectedIndex={selected_index}
         onChangeIndex={handleChangeIndex}
         onUnauthenticated={onUnauthenticated}
         toolbarContent={toolbarContent}
@@ -152,7 +153,7 @@ const DrawerResponsive: React.FC<DrawerProps> = ({
           emailUsuario={emailUsuario}
           menuItems={menuItems}
           avatarMenuItems={avatarMenuItems}
-          selectedIndex={selectedIndex}
+          selectedIndex={selected_index}
           onChangeIndex={handleChangeIndex}
           onUnauthenticated={onUnauthenticated}
           toolbarContent={toolbarContent}
