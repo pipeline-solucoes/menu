@@ -4,24 +4,6 @@ import DesktopDrawer from './DesktopDrawer';
 import { DrawerProps } from '@/types/Drawer';
 import { useMediaQuery, useTheme } from '@mui/material';
 
-type DrawerResponsiveProps = DrawerProps & {
-  /**
-   * Índice da aba/item ativo controlado externamente.
-   * Quando definido, o DrawerResponsive vira controlado.
-   */
-  activeTabIndex?: number;
-
-  /**
-   * Índice inicial quando não controlado por `activeTabIndex`.
-   */
-  defaultTabIndex?: number;
-
-  /**
-   * Callback disparado ao trocar de aba/item.
-   */
-  onTabChange?: (index: number) => void;
-};
-
 /**
  * DrawerResponsive é um layout de navegação responsivo que:
  * - Em telas pequenas (xs/sm) usa o `MobileDrawer`;
@@ -45,7 +27,7 @@ type DrawerResponsiveProps = DrawerProps & {
  * };
  * ```
  */
-const DrawerResponsive: React.FC<DrawerResponsiveProps> = ({
+const DrawerResponsive: React.FC<DrawerProps> = ({
   endPointLogout,
   backgroundHeader,
   backgroundMenuAvatar,

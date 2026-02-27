@@ -427,6 +427,7 @@ const DesktopDrawer: React.FC<DrawerProps> = ({
                       // garante que o texto do título continue na mesma linha do ícone
                       flex: open ? '1 1 auto' : '0 0 auto',
                       m: 0,
+                      fontWeight: 800,
                     }}
                   />
 
@@ -444,9 +445,8 @@ const DesktopDrawer: React.FC<DrawerProps> = ({
                       // força o wrapper a "pular" para a próxima linha
                       style={{
                         flexBasis: '100%',
-                        width: '100%',
-                        // indent para alinhar com o começo do texto (mesmo alinhamento dos itens do menu)
-                        marginLeft: 'calc(24px + 24px)', // (aprox) largura do ícone + gap do ListItemIcon
+                        width: '100%',  
+                        margin: '24px 0',                      
                       }}
                     >
                       {/* label apenas para acessibilidade */}
