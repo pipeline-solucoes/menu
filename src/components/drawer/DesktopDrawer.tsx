@@ -131,8 +131,26 @@ const CardAvatar = styled('div')(() => ({
   width: '100%',
   gap: '16px',
   marginBottom: '24px',
-  padding: '8px 20ox',
+  padding: '8px 20px',
 }));
+
+type DesktopDrawerProps = Omit<DrawerProps, 'selectedIndex' | 'onChangeIndex'> & {
+  /**
+   * Índice da aba/item ativo controlado externamente.
+   */
+  activeTabIndex?: number;
+
+  /**
+   * Índice inicial quando não controlado.
+   * @default 0
+   */
+  defaultTabIndex?: number;
+
+  /**
+   * Callback disparado ao trocar de aba/item.
+   */
+  onTabChange?: (index: number) => void;
+};
 
 /**
  * Layout desktop responsável por exibir:
@@ -143,58 +161,25 @@ const CardAvatar = styled('div')(() => ({
  * Também suporta um estado de carregamento (`loading`) que exibe um overlay
  * escurecido com um spinner centralizado, desabilitando a interação com a página.
  *
- * @param {string} backgroundHeader Cor de fundo do AppBar.
- * @param {string} backgroundMenuAvatar Cor de fundo do menu Avatar.
- * @param {string} colorItemMenu Cor do ícone do menu e dos itens de menu.
- * @param {string} colorItemMenuSelected Cor do item de menu selecionado.
- * @param {number | string | null} idUsuarioLogado Id do usuário logado.
- * @param {string} nomeUsuarioLogado Nome do usuário logado.
- * @param {string} emailUsuario Email do usuário logado.
- * @param {Array<any>} menuItems Itens exibidos no Drawer.
- * @param {Array<any>} avatarMenuItems Itens exibidos no menu do avatar.
- * @param {string} profileImage URL final da imagem de avatar já tratada.
- * @param {number} selectedIndex Índice do item selecionado.
- * @param {(index: number) => void} onChangeIndex Callback chamado ao alterar o item selecionado.
- * @param {() => void} [onUnauthenticated] Callback chamado se não tiver usuário logado.
- * @param {React.ReactNode} [toolbarContent] Conteúdos genéricos exibidos na barra de ferramentas (texto, ícones, imagens etc.).
- * @param {boolean} [loading=false] Indica se o overlay de loading deve ser exibido sobre toda a tela.
- * @param {string} [loadingBackgroundColor='rgba(0, 0, 0, 0.4)'] Cor de fundo do overlay de loading.
- * @param {number} [loadingSpinnerSize=48] Tamanho do spinner de loading.
- * @param {string} [loadingMessage] Texto opcional exibido abaixo do spinner de loading.
- * @param {string} [loadingColor='#ffffff'] Cor do spinner e do texto da mensagem de loading.
- *
- * Exibido apenas em `md` ou acima.
+ * @param {number} [activeTabIndex] Índice ativo controlado externamente (troca programática).
+ * @param {number} [defaultTabIndex=0] Índice inicial quando não controlado.
+ * @param {(index: number) => void} [onTabChange] Callback disparado ao trocar de aba/item.
  *
  * @example
  * ```tsx
- * import DesktopDrawer from '@/components/DesktopDrawer';
- *
- * const Example = () => {
+ * const Page = () => {
+ *   const [tab, setTab] = React.useState(0);
  *   return (
  *     <DesktopDrawer
- *       backgroundHeader="#ffffff"
- *       backgroundMenuAvatar="#f5f5f5"
- *       colorItemMenu="#000000"
- *       colorItemMenuSelected="#1976d2"
- *       idUsuarioLogado={1}
- *       nomeUsuarioLogado="John Doe"
- *       emailUsuario="john.doe@email.com"
- *       profileImage="/images/default-avatar.png"
- *       menuItems={menuItems}
- *       avatarMenuItems={avatarMenuItems}
- *       selectedIndex={0}
- *       onChangeIndex={(index) => console.log(index)}
- *       loading={true}
- *       loadingBackgroundColor="rgba(0, 0, 0, 0.6)"
- *       loadingSpinnerSize={64}
- *       loadingMessage="Carregando dados..."
- *       loadingColor="#ffffff"
+ *       // ...outras props
+ *       activeTabIndex={tab}
+ *       onTabChange={setTab}
  *     />
  *   );
  * };
  * ```
  */
-const DesktopDrawer: React.FC<DrawerProps> = ({
+const DesktopDrawer: React.FC<DesktopDrawerProps> = ({
   endPointLogout,
   backgroundHeader,
   backgroundMenuAvatar,
@@ -206,10 +191,12 @@ const DesktopDrawer: React.FC<DrawerProps> = ({
   profileImage,
   menuItems,
   avatarMenuItems,
-  selectedIndex,
-  onChangeIndex,
+  activeTabIndex,
+  defaultTabIndex = 0,
+  onTabChange,
   onUnauthenticated,
   toolbarContent,
+  menuContent,
   loading,
   loadingBackgroundColor,
   loadingSpinnerSize,
@@ -217,19 +204,29 @@ const DesktopDrawer: React.FC<DrawerProps> = ({
   loadingColor,
   titulo,
   subtitulo,
-  menu_opened=true
+  menu_opened = true,
 }) => {
-
   const theme = useTheme();
   const { confirm, ConfirmMessagePortal } = useConfirmMessage();
-  
+
   const [open, setOpen] = React.useState(menu_opened);
 
-  //garante que só chamamos onUnauthenticated uma única vez
+  const isControlled = typeof activeTabIndex === 'number';
+  const [internalIndex, setInternalIndex] = React.useState<number>(defaultTabIndex);
+
+  // Se defaultTabIndex mudar e estiver uncontrolled, acompanha.
+  React.useEffect(() => {
+    if (!isControlled) {
+      setInternalIndex(defaultTabIndex);
+    }
+  }, [defaultTabIndex, isControlled]);
+
+  const currentIndex = isControlled ? activeTabIndex! : internalIndex;
+
+  // garante que só chamamos onUnauthenticated uma única vez
   const hasFiredUnauth = React.useRef(false);
 
   React.useEffect(() => {
-    // só dispara quando já terminou o loading
     if (
       !hasFiredUnauth.current &&
       loading === false &&
@@ -238,43 +235,36 @@ const DesktopDrawer: React.FC<DrawerProps> = ({
       hasFiredUnauth.current = true;
       onUnauthenticated?.();
     }
-  }, [loading, idUsuarioLogado]); 
+  }, [loading, idUsuarioLogado, onUnauthenticated]);
 
   if (loading === false && idUsuarioLogado === null) {
-    // enquanto o pai decide o que fazer (redirect, etc.), você não renderiza nada
     return null;
   }
 
   const handleDrawerOpen = () => setOpen(true);
   const handleDrawerClose = () => setOpen(false);
 
-  const [, setErrorMsg] = React.useState<string | null>(null);
-
   const handleClickLogout = async () => {
-    setErrorMsg(null);
-    try {
-      
-      const accepted = await confirm({
-        message: 'Deseja realmente sair?',        
-        confirmLabel: 'Ok',
-        cancelLabel: 'Cancelar',                        
-        closeOnBackdropClick: true,
-        closeOnEsc: true,
-      });
+    const accepted = await confirm({
+      message: 'Deseja realmente sair?',
+      confirmLabel: 'Ok',
+      cancelLabel: 'Cancelar',
+      closeOnBackdropClick: true,
+      closeOnEsc: true,
+    });
 
-      if (!accepted) return;
+    if (!accepted) return;
+    window.location.href = endPointLogout;
+  };
 
-      window.location.href = endPointLogout;
-
-    } catch (e) {
-      setErrorMsg('Ocorreu um erro no logout.');
-    }
+  const handleSelectTab = (index: number) => {
+    onTabChange?.(index);
+    if (!isControlled) setInternalIndex(index);
   };
 
   return (
     <>
-      <Box sx={{ display: 'flex'}} >
-        
+      <Box sx={{ display: 'flex' }}>
         <AppBar position="fixed" open={open} background={backgroundHeader}>
           <Toolbar>
             <IconButton
@@ -323,34 +313,34 @@ const DesktopDrawer: React.FC<DrawerProps> = ({
           <Divider />
 
           <List>
-            
-            { open && titulo &&
+            {open && titulo && (
               <CardAvatar>
-                <Avatar 
+                <Avatar
                   src={profileImage}
                   alt={`foto do perfil de ${nomeUsuarioLogado}`}
                   sx={{ width: 48, height: 48, cursor: 'pointer' }}
-                /> 
+                />
                 <Box display="flex" flexDirection="column">
-                  <Typography variant='subtitle2' color={colorItemMenu}>
+                  <Typography variant="subtitle2" color={colorItemMenu}>
                     {titulo}
                   </Typography>
-                  <Typography variant='caption' color={colorItemMenu}>
+                  <Typography variant="caption" color={colorItemMenu}>
                     {subtitulo}
                   </Typography>
-                </Box>             
-              </CardAvatar> 
-            }
+                </Box>
+              </CardAvatar>
+            )}
 
             {menuItems.map((item, index) => (
-              <ListItem key={item.text} disablePadding sx={{ display: 'block' }}>
+              <ListItem key={item.text ?? index} disablePadding sx={{ display: 'block' }}>
                 <ListItemButton
-                  selected={selectedIndex === index}
-                  onClick={() => onChangeIndex(index)}
+                  selected={currentIndex === index}
+                  onClick={() => handleSelectTab(index)}
                   sx={{
                     minHeight: 48,
                     px: 2.5,
                     justifyContent: open ? 'initial' : 'center',
+                    color: currentIndex === index ? colorItemMenuSelected : colorItemMenu,
                   }}
                 >
                   <ListItemIcon
@@ -358,21 +348,20 @@ const DesktopDrawer: React.FC<DrawerProps> = ({
                       minWidth: 0,
                       justifyContent: 'center',
                       mr: open ? 3 : 'auto',
+                      color: currentIndex === index ? colorItemMenuSelected : colorItemMenu,
                     }}
                   >
                     {item.icon}
                   </ListItemIcon>
-                  <ListItemText
-                    primary={item.text}
-                    sx={{ opacity: open ? 1 : 0 }}
-                  />
+                  <ListItemText primary={item.text} sx={{ opacity: open ? 1 : 0 }} />
                 </ListItemButton>
+
+                {menuContent && menuContent}
               </ListItem>
             ))}
 
             <Box height="24px" />
 
-            {/* Botão logout */}
             <ListItem key="logout" disablePadding sx={{ display: 'block' }}>
               <ListItemButton
                 onClick={handleClickLogout}
@@ -380,6 +369,7 @@ const DesktopDrawer: React.FC<DrawerProps> = ({
                   minHeight: 48,
                   px: 2.5,
                   justifyContent: open ? 'initial' : 'center',
+                  color: colorItemMenu,
                 }}
               >
                 <ListItemIcon
@@ -395,12 +385,12 @@ const DesktopDrawer: React.FC<DrawerProps> = ({
                 <ListItemText primary="Sair" sx={{ opacity: open ? 1 : 0 }} />
               </ListItemButton>
             </ListItem>
-          </List>          
+          </List>
         </Drawer>
 
         <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
           <DrawerHeader />
-          {menuItems[selectedIndex ?? 0]?.component ?? (
+          {menuItems[currentIndex]?.component ?? (
             <Typography>Selecione um item do menu.</Typography>
           )}
         </Box>
@@ -413,7 +403,10 @@ const DesktopDrawer: React.FC<DrawerProps> = ({
           overlayBackground={loadingBackgroundColor}
           overlayColor={loadingColor}
         >
-          <CircularProgress size={loadingSpinnerSize} sx={{ color: loadingColor, mb: loadingMessage ? 2 : 0 }} />
+          <CircularProgress
+            size={loadingSpinnerSize}
+            sx={{ color: loadingColor, mb: loadingMessage ? 2 : 0 }}
+          />
           {loadingMessage && (
             <Typography sx={{ mt: 2, color: loadingColor }}>
               {loadingMessage}

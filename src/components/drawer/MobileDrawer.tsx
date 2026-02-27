@@ -13,7 +13,6 @@ import MuiAppBar from '@mui/material/AppBar';
 import { DrawerProps, MenuItemDrawer } from '@/types/Drawer';
 import IconDrawerTrigger from './IconDrawerTrigger';
 import UserAvatarMenu from './UserAvatarMenu';
-import { useConfirmMessage } from '@pipelinesolucoes/notification';
 
 const StyledHeader = styled(MuiAppBar, {
   shouldForwardProp: (prop) => prop !== 'backgroundHeader',
@@ -40,12 +39,6 @@ const StyledBottomBar = styled(BottomNavigation, {
   right: 0,
   backgroundColor: background,
   borderTop: `1px solid ${theme.palette.divider}`,
-  fontFamily: theme.typography.fontFamily,
-  fontWeight: theme.typography.caption?.fontWeight,
-  fontStyle: theme.typography.caption?.fontStyle,
-  lineHeight: theme.typography.caption?.lineHeight,
-  letterSpacing: theme.typography.caption?.letterSpacing,
-  fontSize: theme.typography.caption?.fontSize,
 
   '& .MuiBottomNavigationAction-root': {
     color: color,
@@ -58,7 +51,6 @@ const StyledBottomBar = styled(BottomNavigation, {
 
 const ToolbarContent = styled('div')(() => ({
   display: 'flex',
-  flexDirection: 'row',
   alignItems: 'center',
   justifyContent: 'end',
   width: '100%',
@@ -80,71 +72,54 @@ const LoadingOverlay = styled('div', {
   flexDirection: 'column',
   alignItems: 'center',
   justifyContent: 'center',
-  pointerEvents: 'auto',
   color: overlayColor || '#ffffff',
 }));
 
+type MobileDrawerProps = Omit<DrawerProps, 'selectedIndex' | 'onChangeIndex'> & {
+  /**
+   * Índice da aba/item ativo controlado externemente.
+   */
+  activeTabIndex?: number;
+
+  /**
+   * Índice inicial quando não controlado.
+   * @default 0
+   */
+  defaultTabIndex?: number;
+
+  /**
+   * Callback disparado ao trocar de aba.
+   */
+  onTabChange?: (index: number) => void;
+};
+
 /**
- * Layout mobile responsável por exibir:
- * - AppBar fixo com avatar e nome do usuário;
- * - Conteúdo principal com scroll interno;
- * - BottomNavigation fixo na parte inferior.
+ * Layout mobile com navegação via BottomNavigation.
  *
- * Também suporta um estado de carregamento (`loading`) que exibe um overlay
- * escurecido com um spinner centralizado, desabilitando a interação com a página.
+ * Suporta modo:
+ * - Controlado (via activeTabIndex)
+ * - Não-controlado (via defaultTabIndex)
  *
- * Exibido apenas em `xs` e `sm`.
- *
- * @param {string} backgroundHeader Cor de fundo do AppBar.
- * @param {string} backgroundMenuAvatar Cor de fundo do menu Avatar.
- * @param {string} colorItemMenu Cor do ícone do menu e dos itens de menu.
- * @param {string} colorItemMenuSelected Cor do item de menu selecionado.
- * @param {number | string | null} idUsuarioLogado Id do usuário logado.
- * @param {string} nomeUsuarioLogado Nome do usuário logado.
- * @param {string} emailUsuario Email do usuário logado.
- * @param {Array<any>} menuItems Itens exibidos no Drawer.
- * @param {Array<any>} avatarMenuItems Itens exibidos no menu do avatar.
- * @param {string} profileImage URL final da imagem de avatar já tratada.
- * @param {number} selectedIndex Índice do item selecionado.
- * @param {(index: number) => void} onChangeIndex Callback chamado ao alterar o item selecionado.
- * @param {() => void} [onUnauthenticated] Callback chamado se não tiver usuário logado.
- * @param {React.ReactNode} [toolbarContent] Conteúdos genéricos exibidos na barra de ferramentas (texto, ícones, imagens etc.).
- * @param {boolean} [loading=false] Indica se o overlay de loading deve ser exibido sobre toda a tela.
- * @param {string} [loadingBackgroundColor='rgba(0, 0, 0, 0.4)'] Cor de fundo do overlay de loading.
- * @param {number} [loadingSpinnerSize=48] Tamanho do spinner de loading.
- * @param {string} [loadingMessage] Texto opcional exibido abaixo do spinner de loading.
- * @param {string} [loadingColor='#ffffff'] Cor do spinner e do texto da mensagem de loading.
+ * @param {number} [activeTabIndex] Índice ativo controlado externamente.
+ * @param {number} [defaultTabIndex=0] Índice inicial quando não controlado.
+ * @param {(index: number) => void} [onTabChange] Callback disparado ao trocar de aba.
  *
  * @example
  * ```tsx
- * import MobileDrawer from '@/components/MobileDrawer';
+ * const Page = () => {
+ *   const [tab, setTab] = React.useState(0);
  *
- * const Example = () => {
  *   return (
  *     <MobileDrawer
- *       backgroundHeader="#ffffff"
- *       backgroundMenuAvatar="#f5f5f5"
- *       colorItemMenu="#999999"
- *       colorItemMenuSelected="#1976d2"
- *       idUsuarioLogado={1}
- *       nomeUsuarioLogado="John Doe"
- *       emailUsuario="john.doe@email.com"
- *       profileImage="/images/default-avatar.png"
+ *       activeTabIndex={tab}
+ *       onTabChange={setTab}
  *       menuItems={menuItems}
- *       avatarMenuItems={avatarMenuItems}
- *       selectedIndex={0}
- *       onChangeIndex={(index) => console.log(index)}
- *       loading={true}
- *       loadingBackgroundColor="rgba(0, 0, 0, 0.6)"
- *       loadingSpinnerSize={64}
- *       loadingMessage="Carregando dados..."
- *       loadingColor="#ffffff"
  *     />
  *   );
  * };
  * ```
  */
-const MobileDrawer: React.FC<DrawerProps> = ({
+const MobileDrawer: React.FC<MobileDrawerProps> = ({
   endPointLogout,
   backgroundHeader,
   backgroundMenuAvatar,
@@ -156,8 +131,9 @@ const MobileDrawer: React.FC<DrawerProps> = ({
   emailUsuario,
   menuItems,
   avatarMenuItems,
-  selectedIndex,
-  onChangeIndex,
+  activeTabIndex,
+  defaultTabIndex = 0,
+  onTabChange,
   onUnauthenticated,
   toolbarContent,
   loading = false,
@@ -166,53 +142,61 @@ const MobileDrawer: React.FC<DrawerProps> = ({
   loadingMessage,
   loadingColor = '#ffffff',
 }) => {
-  
-  //garante que só chamamos onUnauthenticated uma única vez
-  const hasFiredUnauth = React.useRef(false);
-  
-    React.useEffect(() => {
-      // só dispara quando já terminou o loading
-      if (
-        !hasFiredUnauth.current &&
-        loading === false &&
-        idUsuarioLogado === null
-      ) {
-        hasFiredUnauth.current = true;
-        onUnauthenticated?.();
-      }
-    }, [loading, idUsuarioLogado]); 
-  
-    if (loading === false && idUsuarioLogado === null) {
-      // enquanto o pai decide o que fazer (redirect, etc.), você não renderiza nada
-      return null;
+  const isControlled = typeof activeTabIndex === 'number';
+
+  const [internalIndex, setInternalIndex] = React.useState<number>(defaultTabIndex);
+
+  const currentIndex = isControlled ? activeTabIndex! : internalIndex;
+
+  const handleChange = (index: number) => {
+    onTabChange?.(index);
+
+    if (!isControlled) {
+      setInternalIndex(index);
     }
+  };
+
+  // controle de autenticação
+  const hasFiredUnauth = React.useRef(false);
+
+  React.useEffect(() => {
+    if (
+      !hasFiredUnauth.current &&
+      loading === false &&
+      idUsuarioLogado === null
+    ) {
+      hasFiredUnauth.current = true;
+      onUnauthenticated?.();
+    }
+  }, [loading, idUsuarioLogado, onUnauthenticated]);
+
+  if (loading === false && idUsuarioLogado === null) {
+    return null;
+  }
 
   return (
     <>
       <Box
         sx={{
-          height: '100vh', // trava o layout na altura da viewport
-          overflow: 'hidden', // evita scroll no container inteiro
+          height: '100vh',
+          overflow: 'hidden',
           display: 'flex',
           flexDirection: 'column',
         }}
       >
-        {/* Header */}
         <StyledHeader position="fixed" backgroundHeader={backgroundHeader}>
           <Toolbar sx={{ display: 'flex', justifyContent: 'space-between' }}>
-            <Typography variant="h6" component="div">
-              {/* Título da aplicação (opcional) */}
-            </Typography>
+            <Typography variant="h6" component="div" />
 
             <ToolbarContent>
-              {toolbarContent && toolbarContent}
+              {toolbarContent}
               <IconDrawerTrigger
                 background={backgroundMenuAvatar}
                 icon={
                   <Avatar
                     src={profileImage}
                     alt={`foto do perfil de ${nomeUsuarioLogado}`}
-                    sx={{ width: 48, height: 48, cursor: 'pointer' }}
+                    sx={{ width: 48, height: 48 }}
                   />
                 }
               >
@@ -227,32 +211,29 @@ const MobileDrawer: React.FC<DrawerProps> = ({
           </Toolbar>
         </StyledHeader>
 
-        {/* Spacer do AppBar */}
         <Toolbar />
 
-        {/* Conteúdo principal (mobile) com scroll interno */}
         <Box
           component="main"
           sx={{
             flex: 1,
             p: 3,
-            mb: '74px', // espaço para o BottomNavigation
-            overflowY: 'auto', // <- scroll fica só aqui
+            mb: '74px',
+            overflowY: 'auto',
           }}
         >
-          {menuItems[selectedIndex ?? 0]?.component ?? (
-            <Typography variant="body1">Selecione um item do menu.</Typography>
+          {menuItems[currentIndex]?.component ?? (
+            <Typography>Selecione um item do menu.</Typography>
           )}
         </Box>
 
-        {/* Bottom Navigation */}
         <StyledBottomBar
           background={backgroundHeader}
           color={colorItemMenu}
           colorSelected={colorItemMenuSelected}
           showLabels
-          value={selectedIndex}
-          onChange={(_, newValue: number) => onChangeIndex(newValue)}
+          value={currentIndex}
+          onChange={(_, newValue: number) => handleChange(newValue)}
         >
           {menuItems.map((item: MenuItemDrawer, idx: number) => (
             <BottomNavigationAction
@@ -271,7 +252,7 @@ const MobileDrawer: React.FC<DrawerProps> = ({
         >
           <CircularProgress
             size={loadingSpinnerSize}
-            sx={{ color: loadingColor, mb: loadingMessage ? 2 : 0 }}
+            sx={{ color: loadingColor }}
           />
           {loadingMessage && (
             <Typography sx={{ mt: 2, color: loadingColor }}>

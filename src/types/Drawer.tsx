@@ -58,10 +58,12 @@ export interface DrawerProps {
   emailUsuario: string;
   menuItems: MenuItemDrawer[];
   avatarMenuItems: AvatarMenuItem[];
-  selectedIndex?: number;
-  onChangeIndex: (index: number) => void;
+  activeTabIndex?: number;
+  defaultTabIndex?: number;
+  onTabChange: (index: number) => void;
   onUnauthenticated?: () => void;
   toolbarContent?: React.ReactNode;  
+  menuContent?: React.ReactNode;
   loading?: boolean;
   loadingBackgroundColor?: string;  
   loadingSpinnerSize?: number;
@@ -69,5 +71,5 @@ export interface DrawerProps {
   loadingColor?: string;
   titulo?: string;
   subtitulo?: string;
-  menu_opened?: boolean;
+  menu_opened?: boolean;   
 }
