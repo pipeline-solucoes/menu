@@ -402,11 +402,17 @@ const DesktopDrawer: React.FC<DrawerProps> = ({
                   sx={{
                     minHeight: 48,
                     px: 2.5,
-                    justifyContent: open ? 'initial' : 'center',
-                    color: colorItemMenu,
+                    justifyContent: open ? 'initial' : 'center',                    
                     // permite quebrar para a linha de baixo
                     flexWrap: open ? 'wrap' : 'nowrap',
                     alignItems: open ? 'flex-start' : 'center',
+                    width: alert?.alertWidth,
+                    padding: alert?.alertPadding,
+                    margin: alert?.alertMargin,
+                    background: alert?.alertBackground,
+                    color: alert?.alertColor ?? colorItemMenu,
+                    borderRadius: alert?.alertBorderRadius,
+                    boxShadow: alert?.alertBoxShadow,
                   }}
                 >
                   <ListItemIcon
@@ -434,19 +440,11 @@ const DesktopDrawer: React.FC<DrawerProps> = ({
                   {/* Agora o conteúdo fica embaixo do ícone + título */}
                   {open && (
                     <AlertAreaWrapper
-                      open={open}
-                      width={alert?.alertWidth}
-                      padding={alert?.alertPadding}
-                      margin={alert?.alertMargin}
-                      background={alert?.alertBackground}
-                      color={alert?.alertColor}
-                      borderRadius={alert?.alertBorderRadius}
-                      boxShadow={alert?.alertBoxShadow}
+                      open={open}                     
                       // força o wrapper a "pular" para a próxima linha
                       style={{
                         flexBasis: '100%',
-                        width: '100%',  
-                        margin: '24px 0',                      
+                        width: '100%',                                                
                       }}
                     >
                       {/* label apenas para acessibilidade */}
