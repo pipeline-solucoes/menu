@@ -69,4 +69,5 @@ export interface DrawerProps {
   loadingColor?: string;
   titulo?: string;
   subtitulo?: string;
+  menu_opened?: boolean;
 }

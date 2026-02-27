@@ -131,6 +131,7 @@ const CardAvatar = styled('div')(() => ({
   width: '100%',
   gap: '16px',
   marginBottom: '24px',
+  padding: '8px 20ox',
 }));
 
 /**
@@ -216,12 +217,13 @@ const DesktopDrawer: React.FC<DrawerProps> = ({
   loadingColor,
   titulo,
   subtitulo,
+  menu_opened=true
 }) => {
 
   const theme = useTheme();
   const { confirm, ConfirmMessagePortal } = useConfirmMessage();
   
-  const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = React.useState(menu_opened);
 
   //garante que só chamamos onUnauthenticated uma única vez
   const hasFiredUnauth = React.useRef(false);
@@ -322,14 +324,14 @@ const DesktopDrawer: React.FC<DrawerProps> = ({
 
           <List>
             
-            { titulo &&
+            { open && titulo &&
               <CardAvatar>
                 <Avatar 
                   src={profileImage}
                   alt={`foto do perfil de ${nomeUsuarioLogado}`}
                   sx={{ width: 48, height: 48, cursor: 'pointer' }}
                 /> 
-                <Box display="flex">
+                <Box display="flex" flexDirection="column">
                   <Typography variant='subtitle2' color={colorItemMenu}>
                     {titulo}
                   </Typography>
@@ -338,7 +340,7 @@ const DesktopDrawer: React.FC<DrawerProps> = ({
                   </Typography>
                 </Box>             
               </CardAvatar> 
-            }            
+            }
 
             {menuItems.map((item, index) => (
               <ListItem key={item.text} disablePadding sx={{ display: 'block' }}>
