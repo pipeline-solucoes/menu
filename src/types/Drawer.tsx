@@ -24,6 +24,34 @@ export interface AvatarMenuItem {
 }
 
 
+/** Representa a area de alerta do Drawer
+ * 
+ * @property alertIcon - Ícone exibido na área de alertas (sempre visível; quando drawer fecha, fica só ele). 
+ * @property alertContent - Conteúdo exibido ao lado/abaixo do ícone quando o drawer está aberto.
+ *    Ideal para renderizar seu componente de alertas com botões/ações internas.
+ * @property onAlertIconClick - Callback ao clicar no ícone de alertas.
+ *    Se não for informado, ao clicar:
+ *      - se drawer estiver fechado, ele abre
+ *      - se estiver aberto, não faz nada (não muda aba)
+ * @property Rótulo de acessibilidade do botão do ícone de alertas.
+ * @default 'Open alerts'
+ */
+
+export interface AlertDrawerProps {
+  alertIcon?: React.ReactElement;
+  alertContent?: React.ReactNode;
+  onAlertIconClick?: () => void;
+  alertAriaLabel?: string;
+
+  alertWidth?: string | number;
+  alertPadding?: string | number;
+  alertMargin?: string | number;
+  alertBackground?: string;
+  alertColor?: string;
+  alertBorderRadius?: string | number;
+  alertBoxShadow?: string;
+};
+
 /**
  * Propriedades do componente MiniDrawer.
  *
@@ -63,7 +91,6 @@ export interface DrawerProps {
   onTabChange: (index: number) => void;
   onUnauthenticated?: () => void;
   toolbarContent?: React.ReactNode;  
-  menuContent?: React.ReactNode;
   loading?: boolean;
   loadingBackgroundColor?: string;  
   loadingSpinnerSize?: number;
@@ -72,4 +99,5 @@ export interface DrawerProps {
   titulo?: string;
   subtitulo?: string;
   menu_opened?: boolean;   
+  alert?: AlertDrawerProps;
 }

@@ -134,23 +134,39 @@ const CardAvatar = styled('div')(() => ({
   padding: '8px 20px',
 }));
 
-type DesktopDrawerProps = Omit<DrawerProps, 'selectedIndex' | 'onChangeIndex'> & {
-  /**
-   * Índice da aba/item ativo controlado externamente.
-   */
-  activeTabIndex?: number;
+const AlertAreaWrapper = styled('div', {
+  shouldForwardProp: (prop) =>
+    ![
+      'open',
+      'width',
+      'padding',
+      'margin',
+      'background',
+      'color',
+      'borderRadius',
+      'boxShadow',
+    ].includes(prop as string),
+})<{
+  open?: boolean;
+  width?: string | number;
+  padding?: string | number;
+  margin?: string | number;
+  background?: string;
+  color?: string;
+  borderRadius?: string | number;
+  boxShadow?: string;
+}>(({ theme, open, width, padding, margin, background, color, borderRadius, boxShadow }) => ({
+  width: open ? (width ?? '100%') : '100%',
+  padding: open ? (padding ?? theme.spacing(1, 1.5)) : 0,
+  margin: open ? (margin ?? theme.spacing(1, 0, 0, 0)) : 0,
+  background: open ? (background ?? 'transparent') : 'transparent',
+  color: color ?? 'inherit',
+  borderRadius: open ? (borderRadius ?? 0) : 0,
+  boxShadow: open ? (boxShadow ?? 'none') : 'none',
+  overflow: 'hidden',
+}));
 
-  /**
-   * Índice inicial quando não controlado.
-   * @default 0
-   */
-  defaultTabIndex?: number;
 
-  /**
-   * Callback disparado ao trocar de aba/item.
-   */
-  onTabChange?: (index: number) => void;
-};
 
 /**
  * Layout desktop responsável por exibir:
@@ -158,28 +174,42 @@ type DesktopDrawerProps = Omit<DrawerProps, 'selectedIndex' | 'onChangeIndex'> &
  * - Drawer lateral (mini/expandido) com itens de navegação;
  * - Conteúdo principal à direita.
  *
+ * Inclui uma área de alertas no Drawer:
+ * - Quando o Drawer está aberto: exibe ícone + conteúdo (`alertContent`);
+ * - Quando o Drawer está fechado: exibe apenas o ícone (`alertIcon`);
+ * - Clique no ícone NÃO troca de aba; ações devem ficar dentro do `alertContent`.
+ *
  * Também suporta um estado de carregamento (`loading`) que exibe um overlay
  * escurecido com um spinner centralizado, desabilitando a interação com a página.
  *
  * @param {number} [activeTabIndex] Índice ativo controlado externamente (troca programática).
  * @param {number} [defaultTabIndex=0] Índice inicial quando não controlado.
  * @param {(index: number) => void} [onTabChange] Callback disparado ao trocar de aba/item.
+ * @param {React.ReactElement} [alertIcon] Ícone exibido na área de alertas (sempre visível).
+ * @param {React.ReactNode} [alertContent] Conteúdo renderizado quando o Drawer está aberto.
+ * @param {() => void} [onAlertIconClick] Callback ao clicar no ícone de alertas.
+ * @param {string} [alertAriaLabel='Open alerts'] Rótulo de acessibilidade do botão de alertas.
+ * @param {string | number} [alertWidth='100%'] Largura do container de alertas (quando aberto).
+ * @param {string | number} [alertPadding=12] Espaçamento interno do container de alertas (quando aberto).
+ * @param {string | number} [alertMargin=0] Margem do container de alertas (quando aberto).
+ * @param {string} [alertBackground='transparent'] Cor de fundo do container de alertas (quando aberto).
+ * @param {string} [alertColor='inherit'] Cor do texto dentro do container de alertas.
+ * @param {string | number} [alertBorderRadius=0] Raio da borda do container de alertas (quando aberto).
+ * @param {string} [alertBoxShadow='none'] Sombra do container de alertas (quando aberto).
  *
  * @example
  * ```tsx
- * const Page = () => {
- *   const [tab, setTab] = React.useState(0);
- *   return (
- *     <DesktopDrawer
- *       // ...outras props
- *       activeTabIndex={tab}
- *       onTabChange={setTab}
- *     />
- *   );
- * };
+ * import NotificationsIcon from '@mui/icons-material/Notifications';
+ *
+ * <DesktopDrawer
+ *   // ...props do drawer
+ *   alertIcon={<NotificationsIcon />}
+ *   alertContent={<MyAlerts onOpenModal={() => setOpen(true)} />}
+ *   onAlertIconClick={() => console.log('clicou no ícone')}
+ * />
  * ```
  */
-const DesktopDrawer: React.FC<DesktopDrawerProps> = ({
+const DesktopDrawer: React.FC<DrawerProps> = ({
   endPointLogout,
   backgroundHeader,
   backgroundMenuAvatar,
@@ -196,7 +226,6 @@ const DesktopDrawer: React.FC<DesktopDrawerProps> = ({
   onTabChange,
   onUnauthenticated,
   toolbarContent,
-  menuContent,
   loading,
   loadingBackgroundColor,
   loadingSpinnerSize,
@@ -205,6 +234,8 @@ const DesktopDrawer: React.FC<DesktopDrawerProps> = ({
   titulo,
   subtitulo,
   menu_opened = true,
+  alert
+ 
 }) => {
   const theme = useTheme();
   const { confirm, ConfirmMessagePortal } = useConfirmMessage();
@@ -214,7 +245,6 @@ const DesktopDrawer: React.FC<DesktopDrawerProps> = ({
   const isControlled = typeof activeTabIndex === 'number';
   const [internalIndex, setInternalIndex] = React.useState<number>(defaultTabIndex);
 
-  // Se defaultTabIndex mudar e estiver uncontrolled, acompanha.
   React.useEffect(() => {
     if (!isControlled) {
       setInternalIndex(defaultTabIndex);
@@ -223,15 +253,10 @@ const DesktopDrawer: React.FC<DesktopDrawerProps> = ({
 
   const currentIndex = isControlled ? activeTabIndex! : internalIndex;
 
-  // garante que só chamamos onUnauthenticated uma única vez
   const hasFiredUnauth = React.useRef(false);
 
   React.useEffect(() => {
-    if (
-      !hasFiredUnauth.current &&
-      loading === false &&
-      idUsuarioLogado === null
-    ) {
+    if (!hasFiredUnauth.current && loading === false && idUsuarioLogado === null) {
       hasFiredUnauth.current = true;
       onUnauthenticated?.();
     }
@@ -261,6 +286,17 @@ const DesktopDrawer: React.FC<DesktopDrawerProps> = ({
     onTabChange?.(index);
     if (!isControlled) setInternalIndex(index);
   };
+
+  const handleAlertClick = () => {
+    if (alert?.onAlertIconClick) {
+      alert?.onAlertIconClick();
+      return;
+    }
+    // Comportamento padrão: se estiver fechado, abre. Se estiver aberto, não faz nada.
+    if (!open) setOpen(true);
+  };
+
+  const shouldRenderAlertArea = Boolean(alert?.alertIcon || alert?.alertContent);
 
   return (
     <>
@@ -354,11 +390,71 @@ const DesktopDrawer: React.FC<DesktopDrawerProps> = ({
                     {item.icon}
                   </ListItemIcon>
                   <ListItemText primary={item.text} sx={{ opacity: open ? 1 : 0 }} />
-                </ListItemButton>                
+                </ListItemButton>
               </ListItem>
             ))}
 
-            {menuContent && menuContent}
+            {/* Área de Alertas (substitui o menuContent). */}
+            {shouldRenderAlertArea && (
+              <ListItem disablePadding sx={{ display: 'block' }}>
+                <ListItemButton
+                  onClick={handleAlertClick}
+                  sx={{
+                    minHeight: 48,
+                    px: 2.5,
+                    justifyContent: open ? 'initial' : 'center',
+                    color: colorItemMenu,
+                  }}
+                >
+                  <ListItemIcon
+                    sx={{
+                      minWidth: 0,
+                      justifyContent: 'center',
+                      mr: open ? 3 : 'auto',
+                      color: colorItemMenu,
+                    }}
+                  >
+                    {alert?.alertIcon ?? <></>}
+                  </ListItemIcon>
+
+                  {/* Quando fechado, não renderiza conteúdo (só ícone). */}
+                  <AlertAreaWrapper
+                    open={open}
+                    width={alert?.alertWidth}
+                    padding={alert?.alertPadding}
+                    margin={alert?.alertMargin}
+                    background={alert?.alertBackground}
+                    color={alert?.alertColor}
+                    borderRadius={alert?.alertBorderRadius}
+                    boxShadow={alert?.alertBoxShadow}
+                  >
+                    {open && (
+                      <Box>
+                        {/* label apenas para acessibilidade (sem texto visual obrigatório) */}
+                        <Typography
+                          component="span"
+                          sx={{
+                            position: 'absolute',
+                            width: 1,
+                            height: 1,
+                            p: 0,
+                            m: -1,
+                            overflow: 'hidden',
+                            clip: 'rect(0, 0, 0, 0)',
+                            whiteSpace: 'nowrap',
+                            border: 0,
+                          }}
+                        >
+                          {alert?.alertAriaLabel}
+                        </Typography>
+
+                        {alert?.alertContent}
+                      </Box>
+                    )}
+                  </AlertAreaWrapper>
+                </ListItemButton>
+              </ListItem>
+            )}
 
             <Box height="24px" />
 
@@ -399,18 +495,13 @@ const DesktopDrawer: React.FC<DesktopDrawerProps> = ({
       </Box>
 
       {loading && (
-        <LoadingOverlay
-          overlayBackground={loadingBackgroundColor}
-          overlayColor={loadingColor}
-        >
+        <LoadingOverlay overlayBackground={loadingBackgroundColor} overlayColor={loadingColor}>
           <CircularProgress
             size={loadingSpinnerSize}
             sx={{ color: loadingColor, mb: loadingMessage ? 2 : 0 }}
           />
           {loadingMessage && (
-            <Typography sx={{ mt: 2, color: loadingColor }}>
-              {loadingMessage}
-            </Typography>
+            <Typography sx={{ mt: 2, color: loadingColor }}>{loadingMessage}</Typography>
           )}
         </LoadingOverlay>
       )}

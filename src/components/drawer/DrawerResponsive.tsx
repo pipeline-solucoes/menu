@@ -59,7 +59,6 @@ const DrawerResponsive: React.FC<DrawerResponsiveProps> = ({
   avatarMenuItems,
   onUnauthenticated,
   toolbarContent,
-  menuContent,
   loading = false,
   loadingBackgroundColor = 'rgba(0, 0, 0, 0.4)',
   loadingSpinnerSize = 48,
@@ -71,6 +70,7 @@ const DrawerResponsive: React.FC<DrawerResponsiveProps> = ({
   titulo,
   subtitulo,
   menu_opened = true,
+  alert
 }) => {
   const defaultAvatar = '/nofoto.jpg';
   const avatarSrc =
@@ -154,7 +154,7 @@ const DrawerResponsive: React.FC<DrawerResponsiveProps> = ({
       titulo={titulo}
       subtitulo={subtitulo}
       menu_opened={menu_opened}
-      menuContent={menuContent}
+      alert={alert}
     />
   );
 };
