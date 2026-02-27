@@ -354,11 +354,11 @@ const DesktopDrawer: React.FC<DesktopDrawerProps> = ({
                     {item.icon}
                   </ListItemIcon>
                   <ListItemText primary={item.text} sx={{ opacity: open ? 1 : 0 }} />
-                </ListItemButton>
-
-                {menuContent && menuContent}
+                </ListItemButton>                
               </ListItem>
             ))}
+
+            {menuContent && menuContent}
 
             <Box height="24px" />
 
