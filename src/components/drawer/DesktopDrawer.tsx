@@ -404,6 +404,9 @@ const DesktopDrawer: React.FC<DrawerProps> = ({
                     px: 2.5,
                     justifyContent: open ? 'initial' : 'center',
                     color: colorItemMenu,
+                    // permite quebrar para a linha de baixo
+                    flexWrap: open ? 'wrap' : 'nowrap',
+                    alignItems: open ? 'flex-start' : 'center',
                   }}
                 >
                   <ListItemIcon
@@ -417,41 +420,56 @@ const DesktopDrawer: React.FC<DrawerProps> = ({
                     {alert?.alertIcon ?? <></>}
                   </ListItemIcon>
 
-                  {/* Quando fechado, não renderiza conteúdo (só ícone). */}
-                  <AlertAreaWrapper
-                    open={open}
-                    width={alert?.alertWidth}
-                    padding={alert?.alertPadding}
-                    margin={alert?.alertMargin}
-                    background={alert?.alertBackground}
-                    color={alert?.alertColor}
-                    borderRadius={alert?.alertBorderRadius}
-                    boxShadow={alert?.alertBoxShadow}
-                  >
-                    {open && (
-                      <Box>
-                        {/* label apenas para acessibilidade (sem texto visual obrigatório) */}
-                        <Typography
-                          component="span"
-                          sx={{
-                            position: 'absolute',
-                            width: 1,
-                            height: 1,
-                            p: 0,
-                            m: -1,
-                            overflow: 'hidden',
-                            clip: 'rect(0, 0, 0, 0)',
-                            whiteSpace: 'nowrap',
-                            border: 0,
-                          }}
-                        >
-                          {alert?.alertAriaLabel}
-                        </Typography>
+                  <ListItemText
+                    primary={alert?.alertTitulo}
+                    sx={{
+                      opacity: open ? 1 : 0,
+                      // garante que o texto do título continue na mesma linha do ícone
+                      flex: open ? '1 1 auto' : '0 0 auto',
+                      m: 0,
+                    }}
+                  />
 
-                        {alert?.alertContent}
-                      </Box>
-                    )}
-                  </AlertAreaWrapper>
+                  {/* Agora o conteúdo fica embaixo do ícone + título */}
+                  {open && (
+                    <AlertAreaWrapper
+                      open={open}
+                      width={alert?.alertWidth}
+                      padding={alert?.alertPadding}
+                      margin={alert?.alertMargin}
+                      background={alert?.alertBackground}
+                      color={alert?.alertColor}
+                      borderRadius={alert?.alertBorderRadius}
+                      boxShadow={alert?.alertBoxShadow}
+                      // força o wrapper a "pular" para a próxima linha
+                      style={{
+                        flexBasis: '100%',
+                        width: '100%',
+                        // indent para alinhar com o começo do texto (mesmo alinhamento dos itens do menu)
+                        marginLeft: 'calc(24px + 24px)', // (aprox) largura do ícone + gap do ListItemIcon
+                      }}
+                    >
+                      {/* label apenas para acessibilidade */}
+                      <Typography
+                        component="span"
+                        sx={{
+                          position: 'absolute',
+                          width: 1,
+                          height: 1,
+                          p: 0,
+                          m: -1,
+                          overflow: 'hidden',
+                          clip: 'rect(0, 0, 0, 0)',
+                          whiteSpace: 'nowrap',
+                          border: 0,
+                        }}
+                      >
+                        {alert?.alertAriaLabel}
+                      </Typography>
+
+                      {alert?.alertContent}
+                    </AlertAreaWrapper>
+                  )}
                 </ListItemButton>
               </ListItem>
             )}

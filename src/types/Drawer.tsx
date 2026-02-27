@@ -39,6 +39,7 @@ export interface AvatarMenuItem {
 
 export interface AlertDrawerProps {
   alertIcon?: React.ReactElement;
+  alertTitulo?: string;
   alertContent?: React.ReactNode;
   onAlertIconClick?: () => void;
   alertAriaLabel?: string;
