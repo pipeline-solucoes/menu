@@ -123,6 +123,16 @@ const LoadingOverlay = styled('div', {
   color: overlayColor || '#ffffff',
 }));
 
+const CardAvatar = styled('div')(() => ({
+  display: 'flex',
+  flexDirection: 'row',
+  alignItems: 'center',
+  justifyContent: 'start',
+  width: '100%',
+  gap: '16px',
+  marginBottom: '24px',
+}));
+
 /**
  * Layout desktop responsável por exibir:
  * - AppBar com botão de menu e informações do usuário;
@@ -204,6 +214,8 @@ const DesktopDrawer: React.FC<DrawerProps> = ({
   loadingSpinnerSize,
   loadingMessage,
   loadingColor,
+  titulo,
+  subtitulo,
 }) => {
 
   const theme = useTheme();
@@ -309,6 +321,25 @@ const DesktopDrawer: React.FC<DrawerProps> = ({
           <Divider />
 
           <List>
+            
+            { titulo &&
+              <CardAvatar>
+                <Avatar 
+                  src={profileImage}
+                  alt={`foto do perfil de ${nomeUsuarioLogado}`}
+                  sx={{ width: 48, height: 48, cursor: 'pointer' }}
+                /> 
+                <Box display="flex">
+                  <Typography variant='subtitle2' color={colorItemMenu}>
+                    {titulo}
+                  </Typography>
+                  <Typography variant='caption' color={colorItemMenu}>
+                    {subtitulo}
+                  </Typography>
+                </Box>             
+              </CardAvatar> 
+            }            
+
             {menuItems.map((item, index) => (
               <ListItem key={item.text} disablePadding sx={{ display: 'block' }}>
                 <ListItemButton

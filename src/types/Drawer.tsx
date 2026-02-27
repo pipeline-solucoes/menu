@@ -67,4 +67,6 @@ export interface DrawerProps {
   loadingSpinnerSize?: number;
   loadingMessage?: string;
   loadingColor?: string;
+  titulo?: string;
+  subtitulo?: string;
 }

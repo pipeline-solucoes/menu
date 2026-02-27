@@ -96,7 +96,9 @@ const DrawerResponsive: React.FC<DrawerProps> = ({
   loadingMessage,
   loadingColor = '#ffffff',
   onChangeIndex,
-  selectedIndex = 0
+  selectedIndex = 0,
+  titulo,
+  subtitulo
 }) => {
   const defaultAvatar = '/nofoto.jpg';
   const avatarSrc =
@@ -135,7 +137,9 @@ const DrawerResponsive: React.FC<DrawerProps> = ({
         loadingBackgroundColor={loadingBackgroundColor}
         loadingSpinnerSize={loadingSpinnerSize}
         loadingMessage={loadingMessage}
-        loadingColor={loadingColor}        
+        loadingColor={loadingColor}  
+        titulo={titulo}
+        subtitulo={subtitulo}     
       />
     )
   }
@@ -162,6 +166,8 @@ const DrawerResponsive: React.FC<DrawerProps> = ({
           loadingSpinnerSize={loadingSpinnerSize}
           loadingMessage={loadingMessage}
           loadingColor={loadingColor}
+          titulo={titulo}
+          subtitulo={subtitulo}
         />    
     );
   }
