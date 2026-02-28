@@ -47,8 +47,10 @@ const closedMixin = (theme: Theme): CSSObject => ({
 
 const DrawerHeader = styled('div', {
   shouldForwardProp: (prop) => !['background'].includes(prop as string),
-})<{open?: boolean;  background: string;}>(({ theme, background }) => ({
+})<{open?: boolean;  background: string; height: string,}>
+(({ theme, background, height }) => ({
   background,
+  height,
   display: 'grid',
   gridTemplateColumns: '1fr auto',
   padding: theme.spacing(0, 1),
@@ -57,11 +59,10 @@ const DrawerHeader = styled('div', {
 
 const AppBar = styled(MuiAppBar, {
   shouldForwardProp: (prop) => !['open', 'background'].includes(prop as string),
-})<{
-  open?: boolean;
-  background: string;
-}>(({ theme, open, background }) => ({
+})<{ open?: boolean; background: string; height: string,
+}>(({ theme, open, background, height }) => ({
   background,
+  height,
   zIndex: theme.zIndex.drawer + 1,
   transition: theme.transitions.create(['width', 'margin'], {
     easing: theme.transitions.easing.sharp,
@@ -183,8 +184,10 @@ const AlertAreaWrapper = styled('div', {
 const DesktopDrawer: React.FC<DrawerProps> = ({
   
   backgroundHeader = '#fff',
-  backgroundDrawer = '#fff',
-
+  toolbarContent,
+  headerDrawerContent,
+  heightHeader = '72px',
+  
   idUsuarioLogado,
   nomeUsuarioLogado,
   profileImage,
@@ -211,8 +214,7 @@ const DesktopDrawer: React.FC<DrawerProps> = ({
 
   alert,
   onUnauthenticated,
-  toolbarContent,
-  headerDrawerContent,
+  backgroundDrawer = '#fff',
   drawer_opened = true,
  
 }) => {
@@ -280,7 +282,8 @@ const DesktopDrawer: React.FC<DrawerProps> = ({
   return (
     <>
       <Box sx={{ display: 'flex' }}>
-        <AppBar position="fixed" open={open} background={backgroundHeader}>
+
+        <AppBar position="fixed" open={open} background={backgroundHeader} height={heightHeader}>
           <Toolbar>
             <IconButton
               aria-label="open drawer"
@@ -319,7 +322,7 @@ const DesktopDrawer: React.FC<DrawerProps> = ({
         </AppBar>
 
         <Drawer variant="permanent" open={open} background={backgroundDrawer}>
-          <DrawerHeader background={backgroundHeader}>
+          <DrawerHeader background={backgroundHeader} height={heightHeader}>
             <div>
               {headerDrawerContent && headerDrawerContent}
             </div>            
@@ -482,8 +485,7 @@ const DesktopDrawer: React.FC<DrawerProps> = ({
           </List>
         </Drawer>
 
-        <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
-          <DrawerHeader background={backgroundHeader} />
+        <Box component="main" sx={{ flexGrow: 1, p: 3 }}>          
           {menuItems[currentIndex]?.component ?? (
             <Typography>Selecione um item do menu.</Typography>
           )}

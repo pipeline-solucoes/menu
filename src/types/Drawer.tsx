@@ -76,8 +76,7 @@ export interface AlertDrawerProps {
  * 
  */
 export interface DrawerProps {  
-  endPointLogout: string;  
-  backgroundHeader?: string;
+  endPointLogout: string;    
   backgroundMenuAvatar?: string;
   backgroundDrawer?: string;
   colorItemMenu: string;
@@ -102,5 +101,8 @@ export interface DrawerProps {
   subtituloAvatarDrawer?: string;
   drawer_opened?: boolean;   
   alert?: AlertDrawerProps;
+
+  backgroundHeader?: string;
   headerDrawerContent?: React.ReactNode; 
+  heightHeader?: string;
 }

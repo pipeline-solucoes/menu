@@ -54,7 +54,8 @@ const DrawerResponsive: React.FC<DrawerProps> = ({
   subtituloAvatarDrawer,
   drawer_opened = true,
   alert,
-  headerDrawerContent
+  headerDrawerContent,
+  heightHeader
 }) => {
   const defaultAvatar = '/nofoto.jpg';
   const avatarSrc =
@@ -115,9 +116,13 @@ const DrawerResponsive: React.FC<DrawerProps> = ({
 
   return (
     <DesktopDrawer
-      
-      backgroundHeader={backgroundHeader}
+            
       backgroundDrawer={backgroundDrawer}
+
+      backgroundHeader={backgroundHeader}
+      headerDrawerContent={headerDrawerContent}
+      heightHeader={heightHeader}
+      toolbarContent={toolbarContent}
 
       idUsuarioLogado={idUsuarioLogado}
       nomeUsuarioLogado={nomeUsuarioLogado}
@@ -144,9 +149,7 @@ const DrawerResponsive: React.FC<DrawerProps> = ({
       onTabChange={handleChangeIndex}
 
       alert={alert}
-      onUnauthenticated={onUnauthenticated}
-      toolbarContent={toolbarContent}
-      headerDrawerContent={headerDrawerContent}
+      onUnauthenticated={onUnauthenticated}            
       drawer_opened={drawer_opened}
     />
   );
