@@ -45,7 +45,10 @@ const closedMixin = (theme: Theme): CSSObject => ({
   },
 });
 
-const DrawerHeader = styled('div')(({ theme }) => ({
+const DrawerHeader = styled('div', {
+  shouldForwardProp: (prop) => !['background'].includes(prop as string),
+})<{open?: boolean;  background: string;}>(({ theme, background }) => ({
+  background,
   display: 'grid',
   gridTemplateColumns: '1fr auto',
   padding: theme.spacing(0, 1),
@@ -316,7 +319,7 @@ const DesktopDrawer: React.FC<DrawerProps> = ({
         </AppBar>
 
         <Drawer variant="permanent" open={open} background={backgroundDrawer}>
-          <DrawerHeader>
+          <DrawerHeader background={backgroundHeader}>
             <div>
               {headerDrawerContent && headerDrawerContent}
             </div>            
@@ -480,7 +483,7 @@ const DesktopDrawer: React.FC<DrawerProps> = ({
         </Drawer>
 
         <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
-          <DrawerHeader />
+          <DrawerHeader background={backgroundHeader} />
           {menuItems[currentIndex]?.component ?? (
             <Typography>Selecione um item do menu.</Typography>
           )}
