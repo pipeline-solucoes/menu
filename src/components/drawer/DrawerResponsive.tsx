@@ -31,6 +31,7 @@ const DrawerResponsive: React.FC<DrawerProps> = ({
   endPointLogout,
   backgroundHeader,
   backgroundMenuAvatar,
+  backgroundDrawer,
   colorItemMenu,
   colorItemMenuSelected,
   idUsuarioLogado,
@@ -49,8 +50,8 @@ const DrawerResponsive: React.FC<DrawerProps> = ({
   onTabChange,
   activeTabIndex,
   defaultTabIndex = 0,
-  titulo,
-  subtitulo,
+  tituloAvatarDrawer,
+  subtituloAvatarDrawer,
   menu_opened = true,
   alert
 }) => {
@@ -113,30 +114,38 @@ const DrawerResponsive: React.FC<DrawerProps> = ({
 
   return (
     <DesktopDrawer
-      endPointLogout={endPointLogout}
+      
       backgroundHeader={backgroundHeader}
-      backgroundMenuAvatar={backgroundMenuAvatar}
-      colorItemMenu={colorItemMenu}
-      colorItemMenuSelected={colorItemMenuSelected}
+      backgroundDrawer={backgroundDrawer}
+
       idUsuarioLogado={idUsuarioLogado}
       nomeUsuarioLogado={nomeUsuarioLogado}
       profileImage={avatarSrc}
       emailUsuario={emailUsuario}
+      
       menuItems={menuItems}
-      avatarMenuItems={avatarMenuItems}
-      activeTabIndex={currentIndex}
-      onTabChange={handleChangeIndex}
-      onUnauthenticated={onUnauthenticated}
-      toolbarContent={toolbarContent}
+      avatarMenuItems={avatarMenuItems}      
+      endPointLogout={endPointLogout}
+      backgroundMenuAvatar={backgroundMenuAvatar}
+      colorItemMenu={colorItemMenu}
+      colorItemMenuSelected={colorItemMenuSelected}
+      menu_opened={menu_opened}
+      tituloAvatarDrawer={tituloAvatarDrawer}
+      subtituloAvatarDrawer={subtituloAvatarDrawer}
+            
       loading={loading}
       loadingBackgroundColor={loadingBackgroundColor}
       loadingSpinnerSize={loadingSpinnerSize}
       loadingMessage={loadingMessage}
       loadingColor={loadingColor}
-      titulo={titulo}
-      subtitulo={subtitulo}
-      menu_opened={menu_opened}
+            
+      defaultTabIndex={defaultTabIndex}
+      activeTabIndex={currentIndex}
+      onTabChange={handleChangeIndex}
+
       alert={alert}
+      onUnauthenticated={onUnauthenticated}
+      toolbarContent={toolbarContent}
     />
   );
 };

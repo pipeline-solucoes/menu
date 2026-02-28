@@ -121,8 +121,8 @@ type MobileDrawerProps = Omit<DrawerProps, 'selectedIndex' | 'onChangeIndex'> & 
  */
 const MobileDrawer: React.FC<MobileDrawerProps> = ({
   endPointLogout,
-  backgroundHeader,
-  backgroundMenuAvatar,
+  backgroundHeader = '#fff',
+  backgroundMenuAvatar = '#fff',
   colorItemMenu,
   colorItemMenuSelected,
   idUsuarioLogado,

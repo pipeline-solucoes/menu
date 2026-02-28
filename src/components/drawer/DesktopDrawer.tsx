@@ -46,9 +46,8 @@ const closedMixin = (theme: Theme): CSSObject => ({
 });
 
 const DrawerHeader = styled('div')(({ theme }) => ({
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'flex-end',
+  display: 'grid',
+  gridTemplateColumns: '1fr auto',
   padding: theme.spacing(0, 1),
   ...theme.mixins.toolbar,
 }));
@@ -76,10 +75,9 @@ const AppBar = styled(MuiAppBar, {
 }));
 
 const Drawer = styled(MuiDrawer, {
-  shouldForwardProp: (prop) => prop !== 'open',
-})<{
-  open?: boolean;
-}>(({ theme, open }) => ({
+  shouldForwardProp: (prop) => !['open', 'background'].includes(prop as string),
+})<{open?: boolean;  background: string;}>(({ theme, open, background }) => ({
+  background,
   width: drawerWidth,
   flexShrink: 0,
   whiteSpace: 'nowrap',
@@ -182,59 +180,41 @@ const AlertAreaWrapper = styled('div', {
  * Também suporta um estado de carregamento (`loading`) que exibe um overlay
  * escurecido com um spinner centralizado, desabilitando a interação com a página.
  *
- * @param {number} [activeTabIndex] Índice ativo controlado externamente (troca programática).
- * @param {number} [defaultTabIndex=0] Índice inicial quando não controlado.
- * @param {(index: number) => void} [onTabChange] Callback disparado ao trocar de aba/item.
- * @param {React.ReactElement} [alertIcon] Ícone exibido na área de alertas (sempre visível).
- * @param {React.ReactNode} [alertContent] Conteúdo renderizado quando o Drawer está aberto.
- * @param {() => void} [onAlertIconClick] Callback ao clicar no ícone de alertas.
- * @param {string} [alertAriaLabel='Open alerts'] Rótulo de acessibilidade do botão de alertas.
- * @param {string | number} [alertWidth='100%'] Largura do container de alertas (quando aberto).
- * @param {string | number} [alertPadding=12] Espaçamento interno do container de alertas (quando aberto).
- * @param {string | number} [alertMargin=0] Margem do container de alertas (quando aberto).
- * @param {string} [alertBackground='transparent'] Cor de fundo do container de alertas (quando aberto).
- * @param {string} [alertColor='inherit'] Cor do texto dentro do container de alertas.
- * @param {string | number} [alertBorderRadius=0] Raio da borda do container de alertas (quando aberto).
- * @param {string} [alertBoxShadow='none'] Sombra do container de alertas (quando aberto).
- *
- * @example
- * ```tsx
- * import NotificationsIcon from '@mui/icons-material/Notifications';
- *
- * <DesktopDrawer
- *   // ...props do drawer
- *   alertIcon={<NotificationsIcon />}
- *   alertContent={<MyAlerts onOpenModal={() => setOpen(true)} />}
- *   onAlertIconClick={() => console.log('clicou no ícone')}
- * />
- * ```
  */
 const DesktopDrawer: React.FC<DrawerProps> = ({
+  
+  backgroundHeader = '#fff',
+  backgroundDrawer = '#fff',
+
+  idUsuarioLogado,
+  nomeUsuarioLogado,
+  profileImage,
+  emailUsuario,
+  
+  menuItems,
+  avatarMenuItems,
   endPointLogout,
-  backgroundHeader,
   backgroundMenuAvatar,
   colorItemMenu,
   colorItemMenuSelected,
-  idUsuarioLogado,
-  nomeUsuarioLogado,
-  emailUsuario,
-  profileImage,
-  menuItems,
-  avatarMenuItems,
-  activeTabIndex,
-  defaultTabIndex = 0,
-  onTabChange,
-  onUnauthenticated,
-  toolbarContent,
+  menu_opened = true,
+  tituloAvatarDrawer,
+  subtituloAvatarDrawer,
+        
   loading,
   loadingBackgroundColor,
   loadingSpinnerSize,
   loadingMessage,
   loadingColor,
-  titulo,
-  subtitulo,
-  menu_opened = true,
-  alert
+        
+  defaultTabIndex = 0,
+  activeTabIndex,
+  onTabChange,
+
+  alert,
+  onUnauthenticated,
+  toolbarContent,
+  headerDrawerContent,
  
 }) => {
   const theme = useTheme();
@@ -339,8 +319,11 @@ const DesktopDrawer: React.FC<DrawerProps> = ({
           </Toolbar>
         </AppBar>
 
-        <Drawer variant="permanent" open={open}>
+        <Drawer variant="permanent" open={open} background={backgroundDrawer}>
           <DrawerHeader>
+            <div>
+              {headerDrawerContent && headerDrawerContent}
+            </div>            
             <IconButton onClick={handleDrawerClose}>
               {theme.direction === 'rtl' ? <ChevronRightIcon /> : <ChevronLeftIcon />}
             </IconButton>
@@ -349,7 +332,7 @@ const DesktopDrawer: React.FC<DrawerProps> = ({
           <Divider />
 
           <List>
-            {open && titulo && (
+            {open && tituloAvatarDrawer && (
               <CardAvatar>
                 <Avatar
                   src={profileImage}
@@ -358,10 +341,10 @@ const DesktopDrawer: React.FC<DrawerProps> = ({
                 />
                 <Box display="flex" flexDirection="column">
                   <Typography variant="subtitle2" color={colorItemMenu}>
-                    {titulo}
+                    {tituloAvatarDrawer}
                   </Typography>
                   <Typography variant="caption" color={colorItemMenu}>
-                    {subtitulo}
+                    {subtituloAvatarDrawer}
                   </Typography>
                 </Box>
               </CardAvatar>

@@ -75,10 +75,11 @@ export interface AlertDrawerProps {
  * @property loadingColor - Cor do spinner e do texto da mensagem de loading.
  * 
  */
-export interface DrawerProps {
+export interface DrawerProps {  
   endPointLogout: string;  
-  backgroundHeader: string;
-  backgroundMenuAvatar: string;
+  backgroundHeader?: string;
+  backgroundMenuAvatar?: string;
+  backgroundDrawer?: string;
   colorItemMenu: string;
   colorItemMenuSelected: string;
   idUsuarioLogado: string;
@@ -97,8 +98,9 @@ export interface DrawerProps {
   loadingSpinnerSize?: number;
   loadingMessage?: string;
   loadingColor?: string;
-  titulo?: string;
-  subtitulo?: string;
+  tituloAvatarDrawer?: string;
+  subtituloAvatarDrawer?: string;
   menu_opened?: boolean;   
   alert?: AlertDrawerProps;
+  headerDrawerContent?: React.ReactNode; 
 }
