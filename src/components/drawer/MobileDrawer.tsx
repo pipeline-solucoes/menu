@@ -27,12 +27,14 @@ const StyledHeader = styled(MuiAppBar, {
 
 const StyledBottomBar = styled(BottomNavigation, {
   shouldForwardProp: (prop) =>
-    !['background', 'color', 'colorSelected'].includes(prop as string),
+    !['background', 'color', 'colorSelected', 'height'].includes(prop as string),
 })<{
   background: string;
   color: string;
   colorSelected: string;
-}>(({ theme, background, color, colorSelected }) => ({
+  height: string;
+}>(({ theme, background, color, colorSelected, height }) => ({
+  height,
   position: 'fixed',
   bottom: 0,
   left: 0,
@@ -141,6 +143,8 @@ const MobileDrawer: React.FC<MobileDrawerProps> = ({
   loadingSpinnerSize = 48,
   loadingMessage,
   loadingColor = '#ffffff',
+  heightHeader = '72px',
+  headerDrawerContent
 }) => {
   const isControlled = typeof activeTabIndex === 'number';
 
@@ -185,9 +189,10 @@ const MobileDrawer: React.FC<MobileDrawerProps> = ({
         }}
       >
         <StyledHeader position="fixed" backgroundHeader={backgroundHeader}>
-          <Toolbar sx={{ display: 'flex', justifyContent: 'space-between' }}>
-            <Typography variant="h6" component="div" />
-
+          <Toolbar sx={{ display: 'grid', gridTemplateColumns: '1fr auto', justifyItems: 'flex-start' }}>            
+            <div>
+              {headerDrawerContent && headerDrawerContent}
+            </div>
             <ToolbarContent>
               {toolbarContent}
               <IconDrawerTrigger
@@ -228,6 +233,7 @@ const MobileDrawer: React.FC<MobileDrawerProps> = ({
         </Box>
 
         <StyledBottomBar
+          height={heightHeader}
           background={backgroundHeader}
           color={colorItemMenu}
           colorSelected={colorItemMenuSelected}

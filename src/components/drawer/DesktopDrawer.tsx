@@ -46,19 +46,21 @@ const closedMixin = (theme: Theme): CSSObject => ({
 });
 
 const DrawerHeader = styled('div', {
-  shouldForwardProp: (prop) => !['background'].includes(prop as string),
+  shouldForwardProp: (prop) => !['background', 'height'].includes(prop as string),
 })<{open?: boolean;  background: string; height: string,}>
 (({ theme, background, height }) => ({
   background,
   height,
   display: 'grid',
   gridTemplateColumns: '1fr auto',
+  alignItems: 'center',
+  justifyItems: 'center',
   padding: theme.spacing(0, 1),
   ...theme.mixins.toolbar,
 }));
 
 const AppBar = styled(MuiAppBar, {
-  shouldForwardProp: (prop) => !['open', 'background'].includes(prop as string),
+  shouldForwardProp: (prop) => !['open', 'background', 'height'].includes(prop as string),
 })<{ open?: boolean; background: string; height: string,
 }>(({ theme, open, background, height }) => ({
   background,
