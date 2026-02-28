@@ -52,8 +52,9 @@ const DrawerResponsive: React.FC<DrawerProps> = ({
   defaultTabIndex = 0,
   tituloAvatarDrawer,
   subtituloAvatarDrawer,
-  menu_opened = true,
-  alert
+  drawer_opened = true,
+  alert,
+  headerDrawerContent
 }) => {
   const defaultAvatar = '/nofoto.jpg';
   const avatarSrc =
@@ -129,7 +130,6 @@ const DrawerResponsive: React.FC<DrawerProps> = ({
       backgroundMenuAvatar={backgroundMenuAvatar}
       colorItemMenu={colorItemMenu}
       colorItemMenuSelected={colorItemMenuSelected}
-      menu_opened={menu_opened}
       tituloAvatarDrawer={tituloAvatarDrawer}
       subtituloAvatarDrawer={subtituloAvatarDrawer}
             
@@ -146,6 +146,8 @@ const DrawerResponsive: React.FC<DrawerProps> = ({
       alert={alert}
       onUnauthenticated={onUnauthenticated}
       toolbarContent={toolbarContent}
+      headerDrawerContent={headerDrawerContent}
+      drawer_opened={drawer_opened}
     />
   );
 };

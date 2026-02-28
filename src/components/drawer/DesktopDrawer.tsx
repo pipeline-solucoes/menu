@@ -77,20 +77,16 @@ const AppBar = styled(MuiAppBar, {
 const Drawer = styled(MuiDrawer, {
   shouldForwardProp: (prop) => !['open', 'background'].includes(prop as string),
 })<{open?: boolean;  background: string;}>(({ theme, open, background }) => ({
-  background,
+  
   width: drawerWidth,
   flexShrink: 0,
   whiteSpace: 'nowrap',
   boxSizing: 'border-box',
-  ...(open
-    ? {
-        ...openedMixin(theme),
-        '& .MuiDrawer-paper': openedMixin(theme),
-      }
-    : {
-        ...closedMixin(theme),
-        '& .MuiDrawer-paper': closedMixin(theme),
-      }),
+
+  '& .MuiDrawer-paper': {
+    ...(open ? openedMixin(theme) : closedMixin(theme)),
+    backgroundColor: background,
+  },
 }));
 
 const ToolbarContent = styled('div')(() => ({
@@ -191,15 +187,14 @@ const DesktopDrawer: React.FC<DrawerProps> = ({
   profileImage,
   emailUsuario,
   
-  menuItems,
-  avatarMenuItems,
-  endPointLogout,
-  backgroundMenuAvatar,
+  menuItems,  
   colorItemMenu,
-  colorItemMenuSelected,
-  menu_opened = true,
+  colorItemMenuSelected,  
+  avatarMenuItems,
+  backgroundMenuAvatar,    
   tituloAvatarDrawer,
   subtituloAvatarDrawer,
+  endPointLogout,
         
   loading,
   loadingBackgroundColor,
@@ -215,12 +210,13 @@ const DesktopDrawer: React.FC<DrawerProps> = ({
   onUnauthenticated,
   toolbarContent,
   headerDrawerContent,
+  drawer_opened = true,
  
 }) => {
   const theme = useTheme();
   const { confirm, ConfirmMessagePortal } = useConfirmMessage();
 
-  const [open, setOpen] = React.useState(menu_opened);
+  const [open, setOpen] = React.useState(drawer_opened);
 
   const isControlled = typeof activeTabIndex === 'number';
   const [internalIndex, setInternalIndex] = React.useState<number>(defaultTabIndex);

@@ -100,7 +100,7 @@ export interface DrawerProps {
   loadingColor?: string;
   tituloAvatarDrawer?: string;
   subtituloAvatarDrawer?: string;
-  menu_opened?: boolean;   
+  drawer_opened?: boolean;   
   alert?: AlertDrawerProps;
   headerDrawerContent?: React.ReactNode; 
 }
