@@ -82,17 +82,26 @@ const AppBar = styled(MuiAppBar, {
 
 const Drawer = styled(MuiDrawer, {
   shouldForwardProp: (prop) => !['open', 'background'].includes(prop as string),
-})<{open?: boolean;  background: string;}>(({ theme, open, background }) => ({
-  
-  width: drawerWidth,
+})<{ open?: boolean; background: string }>(({ theme, open, background }) => ({
   flexShrink: 0,
   whiteSpace: 'nowrap',
   boxSizing: 'border-box',
 
-  '& .MuiDrawer-paper': {
-    ...(open ? openedMixin(theme) : closedMixin(theme)),
-    backgroundColor: background,
-  },
+  ...(open && {
+    ...openedMixin(theme),
+    '& .MuiDrawer-paper': {
+      ...openedMixin(theme),
+      backgroundColor: background,
+    },
+  }),
+
+  ...(!open && {
+    ...closedMixin(theme),
+    '& .MuiDrawer-paper': {
+      ...closedMixin(theme),
+      backgroundColor: background,
+    },
+  }),
 }));
 
 const ToolbarContent = styled('div')(() => ({
