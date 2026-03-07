@@ -105,4 +105,7 @@ export interface DrawerProps {
   backgroundHeader?: string;
   headerDrawerContent?: React.ReactNode; 
   heightHeader?: string;
+
+  backgrondToolTip?: string;
+  colorToolTip?: string;
 }

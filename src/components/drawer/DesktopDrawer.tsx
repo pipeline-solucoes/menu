@@ -14,7 +14,7 @@ import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
-import { Avatar, CircularProgress } from '@mui/material';
+import { Avatar, CircularProgress, Tooltip } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 import { DrawerProps } from '@/types/Drawer';
 import { LogoutIcon } from './LogoutIcon';
@@ -134,8 +134,8 @@ const LoadingOverlay = styled('div', {
 
 const CardAvatar = styled('div')(() => ({
   display: 'flex',
-  flexDirection: 'row',
-  alignItems: 'center',
+  flexDirection: 'column',
+  alignItems: 'flex-start',
   justifyContent: 'start',
   width: '100%',
   gap: '16px',
@@ -175,6 +175,31 @@ const AlertAreaWrapper = styled('div', {
   overflow: 'hidden',
 }));
 
+export const TituloAvatar = styled('div', {
+  shouldForwardProp: (prop) => prop !== 'colorText',
+})<{
+  colorText?: string;
+}>(({ theme, colorText }) => ({
+  ...theme.typography.body2,
+  overflow: 'hidden',
+  textOverflow: 'ellipsis',
+  whiteSpace: 'nowrap',
+  minWidth: 0,
+  color: colorText ?? theme.palette.text.primary,
+}));
+
+export const SubTituloAvatar = styled('div', {
+  shouldForwardProp: (prop) => prop !== 'colorText',
+})<{
+  colorText?: string;
+}>(({ theme, colorText }) => ({
+  ...theme.typography.caption,
+  overflow: 'hidden',
+  textOverflow: 'ellipsis',
+  whiteSpace: 'nowrap',
+  minWidth: 0,
+  color: colorText ?? theme.palette.text.primary,
+}));
 
 
 /**
@@ -227,6 +252,9 @@ const DesktopDrawer: React.FC<DrawerProps> = ({
   onUnauthenticated,
   backgroundDrawer = '#fff',
   drawer_opened = true,
+
+  backgrondToolTip,
+  colorToolTip,
  
 }) => {
   const theme = useTheme();
@@ -290,6 +318,29 @@ const DesktopDrawer: React.FC<DrawerProps> = ({
 
   const shouldRenderAlertArea = Boolean(alert?.alertIcon || alert?.alertContent);
 
+  const renderWithTooltip = (label: string, content: React.ReactElement) => {
+  if (open) return content;
+
+  return (
+    <Tooltip 
+      title={label} 
+      placement="right" 
+      arrow
+      slotProps={{
+        tooltip: {
+          sx: {
+            backgroundColor: backgrondToolTip,
+            color: colorToolTip,
+            ...theme.typography.body1
+          },
+        },
+      }}
+    >
+      {content}
+    </Tooltip>
+  );
+};
+
   return (
     <>
       <Box sx={{ display: 'flex' }}>
@@ -352,41 +403,41 @@ const DesktopDrawer: React.FC<DrawerProps> = ({
                   alt={`foto do perfil de ${nomeUsuarioLogado}`}
                   sx={{ width: 48, height: 48, cursor: 'pointer' }}
                 />
-                <Box display="flex" flexDirection="column">
-                  <Typography variant="subtitle2" color={colorItemMenu}>
-                    {tituloAvatarDrawer}
-                  </Typography>
-                  <Typography variant="caption" color={colorItemMenu}>
-                    {subtituloAvatarDrawer}
-                  </Typography>
+                <Box display="flex" flexDirection="column"  minWidth='0'>
+                  <TituloAvatar color={colorItemMenu}>{tituloAvatarDrawer}</TituloAvatar>
+                  <SubTituloAvatar color={colorItemMenu}>{subtituloAvatarDrawer}</SubTituloAvatar>
                 </Box>
               </CardAvatar>
             )}
 
             {menuItems.map((item, index) => (
               <ListItem key={item.text ?? index} disablePadding sx={{ display: 'block' }}>
-                <ListItemButton
-                  selected={currentIndex === index}
-                  onClick={() => handleSelectTab(index)}
-                  sx={{
-                    minHeight: 48,
-                    px: 2.5,
-                    justifyContent: open ? 'initial' : 'center',
-                    color: currentIndex === index ? colorItemMenuSelected : colorItemMenu,
-                  }}
-                >
-                  <ListItemIcon
+
+                {renderWithTooltip(
+                  item.text,
+                  <ListItemButton
+                    selected={currentIndex === index}
+                    onClick={() => handleSelectTab(index)}
                     sx={{
-                      minWidth: 0,
-                      justifyContent: 'center',
-                      mr: open ? 3 : 'auto',
+                      minHeight: 48,
+                      px: 2.5,
+                      justifyContent: open ? 'initial' : 'center',
                       color: currentIndex === index ? colorItemMenuSelected : colorItemMenu,
                     }}
                   >
-                    {item.icon}
-                  </ListItemIcon>
-                  <ListItemText primary={item.text} sx={{ opacity: open ? 1 : 0 }} />
-                </ListItemButton>
+                    <ListItemIcon
+                      sx={{
+                        minWidth: 0,
+                        justifyContent: 'center',
+                        mr: open ? 3 : 'auto',
+                        color: currentIndex === index ? colorItemMenuSelected : colorItemMenu,
+                      }}
+                    >
+                      {item.icon}
+                    </ListItemIcon>
+                    <ListItemText primary={item.text} sx={{ opacity: open ? 1 : 0 }} />
+                  </ListItemButton>
+                )}
               </ListItem>
             ))}
 
@@ -471,32 +522,35 @@ const DesktopDrawer: React.FC<DrawerProps> = ({
             <Box height="24px" />
 
             <ListItem key="logout" disablePadding sx={{ display: 'block' }}>
-              <ListItemButton
-                onClick={handleClickLogout}
-                sx={{
-                  minHeight: 48,
-                  px: 2.5,
-                  justifyContent: open ? 'initial' : 'center',
-                  color: colorItemMenu,
-                }}
-              >
-                <ListItemIcon
-                  sx={{
-                    minWidth: 0,
-                    justifyContent: 'center',
-                    mr: open ? 3 : 'auto',
-                    color: colorItemMenu,
-                  }}
-                >
-                  <LogoutIcon />
-                </ListItemIcon>
-                <ListItemText primary="Sair" sx={{ opacity: open ? 1 : 0 }} />
-              </ListItemButton>
+              {renderWithTooltip(
+                  "Sair",
+                  <ListItemButton
+                    onClick={handleClickLogout}
+                    sx={{
+                      minHeight: 48,
+                      px: 2.5,
+                      justifyContent: open ? 'initial' : 'center',
+                      color: colorItemMenu,
+                    }}
+                  >
+                    <ListItemIcon
+                      sx={{
+                        minWidth: 0,
+                        justifyContent: 'center',
+                        mr: open ? 3 : 'auto',
+                        color: colorItemMenu,
+                      }}
+                    >
+                      <LogoutIcon />
+                    </ListItemIcon>
+                    <ListItemText primary="Sair" sx={{ opacity: open ? 1 : 0 }} />
+                  </ListItemButton>
+              )}
             </ListItem>
           </List>
         </Drawer>
 
-        <Box component="main" sx={{ flexGrow: 1, p: 3 }}> 
+        <Box component="main" sx={{ flexGrow: 1 }}> 
           <Box sx={{height: heightHeader}}></Box>         
           {menuItems[currentIndex]?.component ?? (
             <Typography>Selecione um item do menu.</Typography>

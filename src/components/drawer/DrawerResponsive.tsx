@@ -55,7 +55,9 @@ const DrawerResponsive: React.FC<DrawerProps> = ({
   drawer_opened = true,
   alert,
   headerDrawerContent,
-  heightHeader
+  heightHeader,
+  backgrondToolTip,
+  colorToolTip,
 }) => {
   const defaultAvatar = '/nofoto.jpg';
   const avatarSrc =
@@ -151,6 +153,9 @@ const DrawerResponsive: React.FC<DrawerProps> = ({
       alert={alert}
       onUnauthenticated={onUnauthenticated}            
       drawer_opened={drawer_opened}
+
+      backgrondToolTip={backgrondToolTip}
+      colorToolTip={colorToolTip}
     />
   );
 };
