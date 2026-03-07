@@ -325,10 +325,10 @@ const DesktopDrawer: React.FC<DrawerProps> = ({
     <Tooltip 
       title={label} 
       placement="right" 
-      arrow
       slotProps={{
         tooltip: {
           sx: {
+            padding: '16px',
             backgroundColor: backgrondToolTip,
             color: colorToolTip,
             ...theme.typography.body1
