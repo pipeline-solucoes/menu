@@ -218,15 +218,8 @@ const MobileDrawer: React.FC<MobileDrawerProps> = ({
 
         <Toolbar />
 
-        <Box
-          component="main"
-          sx={{
-            flex: 1,
-            p: 3,
-            mb: '74px',
-            overflowY: 'auto',
-          }}
-        >
+        <Box component="main"
+          sx={{ flex: 1, mb: heightHeader, overflowY: 'auto' }}>
           {menuItems[currentIndex]?.component ?? (
             <Typography>Selecione um item do menu.</Typography>
           )}

@@ -76,27 +76,31 @@ export interface AlertDrawerProps {
  * 
  */
 export interface DrawerProps {  
-  endPointLogout: string;    
+  endPointLogout: string;   
+
   backgroundMenuAvatar?: string;
-  backgroundDrawer?: string;
-  colorItemMenu: string;
-  colorItemMenuSelected: string;
   idUsuarioLogado: string;
   nomeUsuarioLogado: string;
   profileImage?: string;
   emailUsuario: string;
+
+  backgroundDrawer?: string;
+  colorItemMenu: string;
+  colorItemMenuSelected: string;
+  
   menuItems: MenuItemDrawer[];
   avatarMenuItems: AvatarMenuItem[];
   activeTabIndex?: number;
   defaultTabIndex?: number;
-  onTabChange: (index: number) => void;
-  onUnauthenticated?: () => void;
-  toolbarContent?: React.ReactNode;  
+  onTabChange: (index: number) => void;  
+  toolbarContent?: React.ReactNode; 
+
   loading?: boolean;
   loadingBackgroundColor?: string;  
   loadingSpinnerSize?: number;
   loadingMessage?: string;
   loadingColor?: string;
+
   tituloAvatarDrawer?: string;
   subtituloAvatarDrawer?: string;
   drawer_opened?: boolean;   
@@ -108,4 +112,6 @@ export interface DrawerProps {
 
   backgrondToolTip?: string;
   colorToolTip?: string;
+
+  onUnauthenticated?: () => void;
 }
