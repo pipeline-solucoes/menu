@@ -164,25 +164,18 @@ const MobileDrawer: React.FC<DrawerProps> = ({
 
   return (
     <>
-      <Box
-        sx={{
-          height: '100vh',
-          overflow: 'hidden',
-          display: 'flex',
-          flexDirection: 'column',
-        }}
-      >
+      <Box sx={{height: '100vh',overflow: 'hidden', display: 'flex',flexDirection: 'column',}}>
         <StyledHeader position="fixed" backgroundHeader={backgroundHeader}>
           <Toolbar sx={{ 
             display: 'grid', 
             gridTemplateColumns: '1fr auto', 
             justifyItems: 'flex-start', 
             boxShadow:'none',
-            border: `1px solid ${theme.palette.divider}` }}>            
-            <div>
-              {headerDrawerContent && headerDrawerContent}
-            </div>
+            borderBottom: `1px solid ${theme.palette.divider}` }}>                        
             <ToolbarContent>
+              <Box flex="1" alignItems="center" justifyContent="center">
+                {headerDrawerContent && headerDrawerContent}
+              </Box>
               {toolbarContent}
               <IconDrawerTrigger
                 background={backgroundMenuAvatar}

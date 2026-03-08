@@ -346,7 +346,7 @@ const DesktopDrawer: React.FC<DrawerProps> = ({
       <Box sx={{ display: 'flex' }}>
 
         <AppBar position="fixed" open={open} background={backgroundHeader} height={heightHeader}>
-          <Toolbar>
+          <Toolbar sx={{boxShadow:'none', borderBottom: `1px solid ${theme.palette.divider}`}}>
             <IconButton
               aria-label="open drawer"
               onClick={handleDrawerOpen}
