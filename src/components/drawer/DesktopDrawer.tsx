@@ -393,8 +393,6 @@ const DesktopDrawer: React.FC<DrawerProps> = ({
             </IconButton>
           </DrawerHeader>
 
-          <Divider />
-
           <List>
             {open && tituloAvatarDrawer && (
               <CardAvatar>

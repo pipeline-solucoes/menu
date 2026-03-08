@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { styled } from '@mui/material/styles';
+import { styled, useTheme } from '@mui/material/styles';
 import {
   Avatar,
   BottomNavigation,
@@ -77,24 +77,6 @@ const LoadingOverlay = styled('div', {
   color: overlayColor || '#ffffff',
 }));
 
-type MobileDrawerProps = Omit<DrawerProps, 'selectedIndex' | 'onChangeIndex'> & {
-  /**
-   * Índice da aba/item ativo controlado externemente.
-   */
-  activeTabIndex?: number;
-
-  /**
-   * Índice inicial quando não controlado.
-   * @default 0
-   */
-  defaultTabIndex?: number;
-
-  /**
-   * Callback disparado ao trocar de aba.
-   */
-  onTabChange?: (index: number) => void;
-};
-
 /**
  * Layout mobile com navegação via BottomNavigation.
  *
@@ -121,7 +103,7 @@ type MobileDrawerProps = Omit<DrawerProps, 'selectedIndex' | 'onChangeIndex'> & 
  * };
  * ```
  */
-const MobileDrawer: React.FC<MobileDrawerProps> = ({
+const MobileDrawer: React.FC<DrawerProps> = ({
   endPointLogout,
   backgroundHeader = '#fff',
   backgroundMenuAvatar = '#fff',
@@ -146,6 +128,8 @@ const MobileDrawer: React.FC<MobileDrawerProps> = ({
   heightHeader = '72px',
   headerDrawerContent
 }) => {
+
+  const theme = useTheme()
   const isControlled = typeof activeTabIndex === 'number';
 
   const [internalIndex, setInternalIndex] = React.useState<number>(defaultTabIndex);
@@ -189,7 +173,12 @@ const MobileDrawer: React.FC<MobileDrawerProps> = ({
         }}
       >
         <StyledHeader position="fixed" backgroundHeader={backgroundHeader}>
-          <Toolbar sx={{ display: 'grid', gridTemplateColumns: '1fr auto', justifyItems: 'flex-start' }}>            
+          <Toolbar sx={{ 
+            display: 'grid', 
+            gridTemplateColumns: '1fr auto', 
+            justifyItems: 'flex-start', 
+            boxShadow:'none',
+            border: `1px solid ${theme.palette.divider}` }}>            
             <div>
               {headerDrawerContent && headerDrawerContent}
             </div>

@@ -76,7 +76,8 @@ export interface AlertDrawerProps {
  * 
  */
 export interface DrawerProps {  
-  endPointLogout: string;   
+  endPointLogout: string; 
+  isMobile?: boolean;  
 
   backgroundMenuAvatar?: string;
   idUsuarioLogado: string;

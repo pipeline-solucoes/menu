@@ -29,6 +29,7 @@ import { useMediaQuery, useTheme } from '@mui/material';
  */
 const DrawerResponsive: React.FC<DrawerProps> = ({
   endPointLogout,
+  isMobile,
   backgroundHeader,
   backgroundMenuAvatar,
   backgroundDrawer,
@@ -85,11 +86,7 @@ const DrawerResponsive: React.FC<DrawerProps> = ({
     }
   };
 
-  const theme = useTheme();
-  const xs = useMediaQuery(theme.breakpoints.down('sm'));
-  const sm = useMediaQuery(theme.breakpoints.between('sm', 'md'));
-
-  if (xs || sm) {
+  if (isMobile) {
     return (
       <MobileDrawer
         endPointLogout={endPointLogout}
