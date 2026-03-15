@@ -29,6 +29,9 @@ A biblioteca inclui os seguintes componentes:
   Componente de menu vertical que renderiza uma lista de itens de menu empilhados em coluna utilizando `flexbox`.
 
 - **SideNav**
+  Componente de navegação lateral com área de conteúdo associada.
+  Permite alternar entre diferentes seções de conteúdo através de um menu vertical. 
+  Cada item do menu pode possuir um conteúdo associado que será exibido na área principal ao ser selecionado.
 
 - **DrawerResponsive**
   DrawerResponsive é um layout de navegação responsivo que:
