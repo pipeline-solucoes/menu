@@ -32,6 +32,7 @@ const Container = styled("div")(() => ({
   gridTemplateColumns: "auto 1fr",
   width: "100%",
   padding: 0,
+  gap: '16px'
 }));
 
 const SideNavContainer = styled(Box, {
