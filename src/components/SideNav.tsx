@@ -200,7 +200,8 @@ export default function SideNav({
                     itemMenuBorderRadius = {itemMenuBorderRadius}
                     itemMenuBackgroundColor = {itemMenuBackgroundColorSemContent}                    
                     itemMenuColor = {itemMenuColorSemContent}                    
-                    key={`${item.label}-${idx}`}                    
+                    key={`${item.label}-${idx}`} 
+                    sx={{ cursor: "default" }}                   
                   >
                     {item.label}
                   </MenuItemBox>
@@ -209,6 +210,7 @@ export default function SideNav({
               
             return (
                 <MenuItemBox
+                  active={activeIndex === idx}
                   typographyVariant={itemMenuVariant}
                   itemMenuBorderRadius = {itemMenuBorderRadius}
                   itemMenuBackgroundColor = {itemMenuBackgroundColor}
