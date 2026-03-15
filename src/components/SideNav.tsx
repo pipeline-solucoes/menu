@@ -1,20 +1,23 @@
 "use client";
 
 import { useState, ReactNode } from "react";
-import { Box, Divider, styled } from "@mui/material";
+import { Box, Divider, styled, TypographyVariant } from "@mui/material";
 import { motion, AnimatePresence } from "framer-motion";
 import { NavItem } from "../types/NavItem";
 
-interface SideNavProps {
-  
+interface SideNavProps {  
   items: NavItem[];  
-  menuWidth?: number;  
+  menuWidth?: number;   
+  itemMenuBackgroundColorSemContent?: string;  
+  itemMenuColorSemContent?: string;
+  itemMenuVariantSemContent?: TypographyVariant;
   menuBackground?: string;  
   itemMenuBackgroundColor?: string;  
   itemMenuBackgroundColorSelected?: string;  
   itemMenuBackgroundColorHover?: string;  
   itemMenuColor?: string;  
-  itemMenuColorSelected?: string;  
+  itemMenuColorSelected?: string; 
+  itemMenuVariant?: TypographyVariant; 
   borderRadius?: string;  
   itemMenuBorderRadius?: string;  
   contentBackground?: string;
@@ -62,6 +65,7 @@ const MenuItemBox = styled(Box, {
       "itemMenuBackgroundColorHover",
       "itemMenuColor",
       "itemMenuColorSelected",
+      "typographyVariant",
     ].includes(prop as string),
   })<{active?: boolean;
     itemMenuBorderRadius?: number | string;
@@ -70,7 +74,8 @@ const MenuItemBox = styled(Box, {
     itemMenuBackgroundColorHover?: string;
     itemMenuColor?: string;
     itemMenuColorSelected?: string;
-  }>(({
+    typographyVariant?: TypographyVariant;
+  }>(({theme,
       active,
       itemMenuBorderRadius,
       itemMenuBackgroundColor,
@@ -78,6 +83,7 @@ const MenuItemBox = styled(Box, {
       itemMenuBackgroundColorHover,
       itemMenuColor,
       itemMenuColorSelected,
+      typographyVariant
     }) => ({
     cursor: "pointer",
     padding: "8px 16px",
@@ -89,6 +95,7 @@ const MenuItemBox = styled(Box, {
     width: "100%",
     transition: "all 0.2s ease",
     userSelect: "none",
+    ...(typographyVariant && theme.typography[typographyVariant]),
 
     "&:hover": {
       backgroundColor: active
@@ -141,6 +148,9 @@ export const SideNavContent = styled(Box, {
 export default function SideNav({
   items,
   menuWidth = 180,
+  itemMenuBackgroundColorSemContent= "transparent", 
+  itemMenuColorSemContent = "black",
+  itemMenuVariantSemContent = "body1",
   menuBackground = "transparent",
   borderRadius = "0",
   itemMenuBorderRadius = "16px",
@@ -149,6 +159,7 @@ export default function SideNav({
   itemMenuBackgroundColorSelected = "primary.main",
   itemMenuColor = "black",
   itemMenuColorSelected = "black",
+  itemMenuVariant = "body1",
   contentBackground = "grey.50",
   renderTopMenu,
   renderBottomMenu,
@@ -185,9 +196,10 @@ export default function SideNav({
 
               return (
                   <MenuItemBox
+                    typographyVariant={itemMenuVariantSemContent}
                     itemMenuBorderRadius = {itemMenuBorderRadius}
-                    itemMenuBackgroundColor = {itemMenuBackgroundColor}                    
-                    itemMenuColor = {itemMenuColor}                    
+                    itemMenuBackgroundColor = {itemMenuBackgroundColorSemContent}                    
+                    itemMenuColor = {itemMenuColorSemContent}                    
                     key={`${item.label}-${idx}`}                    
                   >
                     {item.label}
@@ -197,6 +209,7 @@ export default function SideNav({
               
             return (
                 <MenuItemBox
+                  typographyVariant={itemMenuVariant}
                   itemMenuBorderRadius = {itemMenuBorderRadius}
                   itemMenuBackgroundColor = {itemMenuBackgroundColor}
                   itemMenuBackgroundColorHover = {itemMenuBackgroundColorHover}
@@ -215,13 +228,7 @@ export default function SideNav({
        
         {/* Bloco inferior */}
         {renderBottomMenu && (
-          <Box
-            sx={{
-              mt: 2,
-              pt: 2,
-              flexShrink: 0,
-            }}
-          >
+          <Box sx={{ mt: 2, pt: 2, flexShrink: 0, }}>
             {renderBottomMenu}
           </Box>
         )}
