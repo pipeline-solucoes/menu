@@ -1,6 +1,6 @@
 import { ReactNode } from "react";
 
 export type NavItem = {
-  label: string;
+  label?: string;
   content: ReactNode;
 }
