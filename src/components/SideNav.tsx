@@ -236,7 +236,11 @@ export default function SideNav({
       </SideNavContainer>
 
       {/* Container de conteúdo */}
-      <SideNavContent contentBackground={contentBackground} contentGap={contentGap}>
+      <SideNavContent contentBackground={contentBackground} 
+        contentGap={contentGap} 
+        height={height}
+        borderRadius={borderRadius}
+      >
         <AnimatePresence mode="wait">
           <motion.div
             key={activeIndex}
