@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, ReactNode } from "react";
-import { Box, styled } from "@mui/material";
+import { Box, Divider, styled } from "@mui/material";
 import { motion, AnimatePresence } from "framer-motion";
 import { NavItem } from "../types/NavItem";
 
@@ -31,7 +31,28 @@ const Container = styled("div")(() => ({
   padding: 0,
 }));
 
-export const MenuItemBox = styled(Box, {
+const SideNavContainer = styled(Box, {
+  shouldForwardProp: (prop) =>
+    !["menuWidth", "height", "menuBackground", "borderRadius"].includes(
+      prop as string
+    ),
+})<{menuWidth?: number | string; 
+    height?: number | string;
+    menuBackground?: string;
+    borderRadius?: number | string;}>
+  (({ menuWidth, height, menuBackground, borderRadius }) => ({
+    width: menuWidth,
+    minHeight: height,
+    maxHeight: height,
+    backgroundColor: menuBackground,
+    borderRadius: borderRadius,
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "space-between",
+    overflow: "hidden",
+}));
+
+const MenuItemBox = styled(Box, {
   shouldForwardProp: (prop) =>
     ![
       "active",
@@ -42,22 +63,22 @@ export const MenuItemBox = styled(Box, {
       "itemMenuColor",
       "itemMenuColorSelected",
     ].includes(prop as string),
-})<{active?: boolean;
-  itemMenuBorderRadius?: number | string;
-  itemMenuBackgroundColor?: string;
-  itemMenuBackgroundColorSelected?: string;
-  itemMenuBackgroundColorHover?: string;
-  itemMenuColor?: string;
-  itemMenuColorSelected?: string;}>(
-  ({
-    active,
-    itemMenuBorderRadius,
-    itemMenuBackgroundColor,
-    itemMenuBackgroundColorSelected,
-    itemMenuBackgroundColorHover,
-    itemMenuColor,
-    itemMenuColorSelected,
-  }) => ({
+  })<{active?: boolean;
+    itemMenuBorderRadius?: number | string;
+    itemMenuBackgroundColor?: string;
+    itemMenuBackgroundColorSelected?: string;
+    itemMenuBackgroundColorHover?: string;
+    itemMenuColor?: string;
+    itemMenuColorSelected?: string;
+  }>(({
+      active,
+      itemMenuBorderRadius,
+      itemMenuBackgroundColor,
+      itemMenuBackgroundColorSelected,
+      itemMenuBackgroundColorHover,
+      itemMenuColor,
+      itemMenuColorSelected,
+    }) => ({
     cursor: "pointer",
     padding: "8px 16px",
     borderRadius: itemMenuBorderRadius,
@@ -74,6 +95,36 @@ export const MenuItemBox = styled(Box, {
         ? itemMenuBackgroundColorSelected
         : itemMenuBackgroundColorHover,
     },
+  })
+);
+
+export const SideNavContent = styled(Box, {
+  shouldForwardProp: (prop) =>
+    !["contentGap", "contentBackground", "borderRadius", "height"].includes(
+      prop as string
+    ),
+  })<{
+    contentGap?: number | string;
+    contentBackground?: string;
+    borderRadius?: number | string;
+    height?: number | string;
+  }>(
+  ({
+    contentGap = 2,
+    contentBackground = "transparent",
+    borderRadius = 2,
+    height = "100%",
+  }) => ({
+    width: "auto",
+    flex: 1,
+    marginLeft: contentGap,
+    padding: 16,
+    backgroundColor: contentBackground,
+    borderRadius: borderRadius,
+    minHeight: height,
+    maxHeight: height,
+    position: "relative",
+    overflowY: "auto",
   })
 );
 
@@ -113,19 +164,11 @@ export default function SideNav({
   return (
     <Container>
       {/* Menu lateral */}
-      <Box
-        sx={{
-          width: menuWidth,
-          minHeight: height,
-          maxHeight: height,
-          bgcolor: menuBackground,
-          borderRadius: borderRadius,
-          display: "flex",
-          flexDirection: "column",
-          justifyContent: "space-between",
-          overflow: "hidden",
-        }}
-      >
+      <SideNavContainer height={height}
+        menuWidth={menuWidth} 
+        menuBackground={menuBackground} 
+        borderRadius={borderRadius}>
+
         {/* Bloco superior: topo + itens */}       
         {renderTopMenu && <Box>{renderTopMenu}</Box>}
 
@@ -134,7 +177,24 @@ export default function SideNav({
 
         <Box sx={{ display: "flex", flexDirection: "column", gap: 1, }}>
           {items.map((item, idx) => {            
-            if (!item.label) return item.content;
+            if (!item.content) {
+
+              if (item.label?.toUpperCase() == "DIVIDER") {
+                return (<Divider/>)
+              }
+
+              return (
+                  <MenuItemBox
+                    itemMenuBorderRadius = {itemMenuBorderRadius}
+                    itemMenuBackgroundColor = {itemMenuBackgroundColor}                    
+                    itemMenuColor = {itemMenuColor}                    
+                    key={`${item.label}-${idx}`}                    
+                  >
+                    {item.label}
+                  </MenuItemBox>
+              );
+            }               
+              
             return (
                 <MenuItemBox
                   itemMenuBorderRadius = {itemMenuBorderRadius}
@@ -166,23 +226,10 @@ export default function SideNav({
           </Box>
         )}
         
-      </Box>
+      </SideNavContainer>
 
       {/* Container de conteúdo */}
-      <Box
-        sx={{
-          width: "auto",
-          flex: 1,
-          ml: contentGap,
-          p: 2,
-          bgcolor: contentBackground,
-          borderRadius: borderRadius,
-          minHeight: height,
-          maxHeight: height,
-          position: "relative",
-          overflowY: "auto",
-        }}
-      >
+      <SideNavContent contentBackground={contentBackground} contentGap={contentGap}>
         <AnimatePresence mode="wait">
           <motion.div
             key={activeIndex}
@@ -195,7 +242,8 @@ export default function SideNav({
             {items[activeIndex]?.content}
           </motion.div>
         </AnimatePresence>
-      </Box>
+      </SideNavContent>
+
     </Container>
   );
 }
