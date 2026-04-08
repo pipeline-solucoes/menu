@@ -81,6 +81,7 @@ interface ItemMenuProps extends ColorProps, BorderProps, LayoutProps {
 
   children: React.ReactNode;  
   afterClick?: () => void;
+  abrirHTTPNovaAba: boolean;
 }
 
 /**
@@ -95,6 +96,7 @@ interface ItemMenuProps extends ColorProps, BorderProps, LayoutProps {
  *   chama primeiro `afterClick()` e aplica um `setTimeout` para evitar reflow pesado antes do scroll.
  *
  * @param {string} url URL de destino. Pode ser externa (`https://...`), interna (`/rota` ou `/#secao`) ou âncora (`#secao`). Obrigatório.
+ * @param {boolean} [abrirHTTPNovaAba='True'] Abrir uma url externa (`https://...`) em uma nova aba`. 
  * @param {string} aria_label Rótulo de acessibilidade aplicado em `aria-label`. Obrigatório.
  * @param {string} [background='transparent'] Cor de fundo (CSS) do item no estado normal.
  * @param {string} [backgroundHover=background] Cor de fundo (CSS) no hover. Por padrão, herda o valor de `background`.
@@ -109,6 +111,7 @@ interface ItemMenuProps extends ColorProps, BorderProps, LayoutProps {
  * @param {string} [padding='8px 24px'] Padding (CSS) quando `layout="button"`. Quando `layout="link"`, o padding efetivo é `'0px'`.
  * @param {React.ReactNode} children Conteúdo interno do item (texto, Typography, ícones etc.). Obrigatório.
  * @param {() => void} [afterClick] Callback opcional disparado antes do scroll (quando âncora) para permitir fechar o menu/rodar ações adicionais.
+
  *
  * IMPORTANTE:
  * 
@@ -151,7 +154,7 @@ interface ItemMenuProps extends ColorProps, BorderProps, LayoutProps {
 const ItemMenu: React.FC<ItemMenuProps> = ({ 
   url, aria_label, background, backgroundHover,
   colorText, colorTextHover, borderRadius, borderColor, text_decoration = 'none',
-  layout, width, margin, padding = '8px 24px', children, afterClick }) => {
+  layout, width, margin, padding = '8px 24px', children, afterClick, abrirHTTPNovaAba = true }) => {
   
   const backgroundColor = background ?? 'transparent';
   const backgroundColorHover = backgroundHover ?? backgroundColor;
@@ -181,7 +184,7 @@ const ItemMenu: React.FC<ItemMenuProps> = ({
     }    
   };
 
-  if (url.indexOf('http') != -1) {
+  if (url.indexOf('http') != -1 && abrirHTTPNovaAba)  {
     return (
       <ButtonStyled 
         href={url}
@@ -203,7 +206,8 @@ const ItemMenu: React.FC<ItemMenuProps> = ({
       </ButtonStyled>
     );    
   }
-  else if (url.indexOf('/#') != -1 || url.startsWith('/')) {
+  
+  else if (url.indexOf('/#') != -1 || url.startsWith('/') || (url.indexOf('http') != -1 && !abrirHTTPNovaAba)) {
     return (
       <ButtonStyled 
         href={url}
@@ -223,6 +227,7 @@ const ItemMenu: React.FC<ItemMenuProps> = ({
       </ButtonStyled>
     );    
   }
+
   else{
     return (
       <ButtonStyled
