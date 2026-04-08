@@ -81,7 +81,7 @@ interface ItemMenuProps extends ColorProps, BorderProps, LayoutProps {
 
   children: React.ReactNode;  
   afterClick?: () => void;
-  abrirHTTPNovaAba: boolean;
+  abrirHTTPNovaAba?: boolean;
 }
 
 /**
