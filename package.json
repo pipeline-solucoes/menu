@@ -1,6 +1,6 @@
 {
   "name": "@pipelinesolucoes/menu",
-  "version": "1.0.3-beta.7",
+  "version": "1.0.3-beta.8",
   "license": "UNLICENSED",
   "repository": {
     "type": "git",
@@ -68,7 +68,7 @@
     "typescript": "^5"
   },
   "dependencies": {
-    "@pipelinesolucoes/notification": "^1.0.2-beta.6",
+    "@pipelinesolucoes/notification": "^1.0.3-beta.3",
     "@pipelinesolucoes/theme": "^1.0.7-beta.3"
   }
 }

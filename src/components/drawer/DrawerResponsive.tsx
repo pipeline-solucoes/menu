@@ -2,7 +2,6 @@ import * as React from 'react';
 import MobileDrawer from './MobileDrawer';
 import DesktopDrawer from './DesktopDrawer';
 import { DrawerProps } from '@/types/Drawer';
-import { useMediaQuery, useTheme } from '@mui/material';
 
 /**
  * DrawerResponsive é um layout de navegação responsivo que:

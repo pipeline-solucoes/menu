@@ -296,6 +296,7 @@ const DesktopDrawer: React.FC<DrawerProps> = ({
       cancelLabel: 'Cancelar',
       closeOnBackdropClick: true,
       closeOnEsc: true,
+      allowLineBreak: true,
     });
 
     if (!accepted) return;
@@ -401,7 +402,7 @@ const DesktopDrawer: React.FC<DrawerProps> = ({
                   alt={`foto do perfil de ${nomeUsuarioLogado}`}
                   sx={{ width: 48, height: 48, cursor: 'pointer' }}
                 />
-                <Box display="flex" flexDirection="column"  minWidth='0'>
+                <Box display="flex" flexDirection="column"  minWidth='0' width="100%">
                   <TituloAvatar color={colorItemMenu}>{tituloAvatarDrawer}</TituloAvatar>
                   <SubTituloAvatar color={colorItemMenu}>{subtituloAvatarDrawer}</SubTituloAvatar>
                 </Box>
@@ -523,7 +524,7 @@ const DesktopDrawer: React.FC<DrawerProps> = ({
               {renderWithTooltip(
                   "Sair",
                   <ListItemButton
-                    onClick={handleClickLogout}
+                    onClick={handleClickLogout}                    
                     sx={{
                       minHeight: 48,
                       px: 2.5,
