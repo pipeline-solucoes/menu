@@ -90,10 +90,21 @@ interface ItemMenuProps extends ColorProps, BorderProps, LayoutProps {
  * borda e hover, além de suportar comportamento de **scroll suave** para âncoras.
  *
  * Regras de navegação:
- * - Se `url` contém `"http"`, abre como link externo (com `target="_blank"` e `rel="noopener noreferrer"`).
- * - Se `url` contém `"/#"` ou começa com `"/"`, renderiza como link interno padrão (sem interceptar o clique).
- * - Caso contrário, assume âncora (ex.: `"#section"`) e faz `scrollIntoView` suave; se `afterClick` existir,
- *   chama primeiro `afterClick()` e aplica um `setTimeout` para evitar reflow pesado antes do scroll.
+ * 1. Link externo:
+ *    - Se `url` contém `"http"` → abre em nova aba
+ *      (`target="_blank"` + `rel="noopener noreferrer"`).
+ * 2. Navegação entre páginas (com ou sem âncora):
+ *    - Se `url` começa com `"/"` (ex.: "/midia" ou "/midia#midia")
+ *    → navegação normal do Next.js (não intercepta clique).
+ *    - O scroll para `#ancora` será tratado na página de destino.
+ * 3. Âncora na mesma página:
+ *    - Se `url` começa com `"#"` (ex.: "#midia")
+ *    → intercepta o clique e faz scroll suave com `scrollIntoView`.
+ *    - Se `afterClick` existir:
+ *        → executa `afterClick()` (ex: fechar menu)
+ *        → aplica um pequeno delay antes do scroll (evita reflow/layout shift).
+ * 4. Fallback:
+ *    - Qualquer outro formato é tratado como link padrão.
  *
  * @param {string} url URL de destino. Pode ser externa (`https://...`), interna (`/rota` ou `/#secao`) ou âncora (`#secao`). Obrigatório.
  * @param {boolean} [abrirHTTPNovaAba='True'] Abrir uma url externa (`https://...`) em uma nova aba`. 
@@ -169,7 +180,10 @@ const ItemMenu: React.FC<ItemMenuProps> = ({
   
   const handleClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
 
+    if (!url.startsWith("#")) return;
+
     e.preventDefault();
+    
     const id = url.replace('#', '');
 
     if (afterClick) {      
@@ -207,7 +221,7 @@ const ItemMenu: React.FC<ItemMenuProps> = ({
     );    
   }
   
-  else if (url.indexOf('/#') != -1 || url.startsWith('/') || (url.indexOf('http') != -1 && !abrirHTTPNovaAba)) {
+  else if (url.includes('/#') || url.startsWith('/') || (url.indexOf('http') != -1 && !abrirHTTPNovaAba)) {
     return (
       <ButtonStyled 
         href={url}
@@ -251,7 +265,7 @@ const ItemMenu: React.FC<ItemMenuProps> = ({
   }
 };
 
-ItemMenu.displayName = "ItemMenu"; // para DevTools
-(ItemMenu as any).typeName = "ItemMenu"; // para seu código
+ItemMenu.displayName = "ItemMenu";
+(ItemMenu as any).typeName = "ItemMenu";
 
 export default ItemMenu;
