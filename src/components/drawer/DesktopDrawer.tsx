@@ -21,7 +21,6 @@ import { LogoutIcon } from './LogoutIcon';
 import IconDrawerTrigger from './IconDrawerTrigger';
 import UserAvatarMenu from './UserAvatarMenu';
 import { useConfirmMessage } from '@pipelinesolucoes/notification';
-import RecordVoiceOverIcon from '@mui/icons-material/RecordVoiceOver';
 import { SupportIcon } from './SuportIcon';
 
 const drawerWidth = 240;
@@ -528,7 +527,7 @@ const DesktopDrawer: React.FC<DrawerProps> = ({
             {onFalarComSuporte &&
               <ListItem key="suporte" disablePadding sx={{ display: 'block' }}>
                   {renderWithTooltip(
-                    "Falar com o suporte",
+                    "Precisa de ajuda?",
                     <ListItemButton
                       onClick={onFalarComSuporte}                    
                       sx={{ 
@@ -545,9 +544,9 @@ const DesktopDrawer: React.FC<DrawerProps> = ({
                           color: colorItemMenu,
                         }}
                       >
-                        <RecordVoiceOverIcon />
+                        <SupportIcon />
                       </ListItemIcon>
-                      <ListItemText primary="Falar com o suporte" sx={{ opacity: open ? 1 : 0 }} />
+                      <ListItemText primary="Precisa de ajuda?" sx={{ opacity: open ? 1 : 0 }} />
                     </ListItemButton>
                 )}
               </ListItem>
@@ -573,7 +572,7 @@ const DesktopDrawer: React.FC<DrawerProps> = ({
                         color: colorItemMenu,
                       }}
                     >
-                      <SupportIcon />
+                      <LogoutIcon />
                     </ListItemIcon>
                     <ListItemText primary="Sair" sx={{ opacity: open ? 1 : 0 }} />
                   </ListItemButton>

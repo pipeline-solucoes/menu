@@ -165,7 +165,7 @@ const UserAvatarMenu: React.FC<UserAvatarMenuProps> = ({
         onClick={onFalarComSuporte}
         sx={{ display: 'flex', alignItems: 'center', gap: 1 }}
       >
-        <SupportIcon sx={{ fontSize: 20 }} /> Sair
+        <SupportIcon sx={{ fontSize: 20 }} /> Precisa de ajuda?
       </MenuItem>  
 
       <MenuItem
