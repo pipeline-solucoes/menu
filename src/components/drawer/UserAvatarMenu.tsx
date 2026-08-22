@@ -161,7 +161,7 @@ const UserAvatarMenu: React.FC<UserAvatarMenuProps> = ({
         ))}
 
       <MenuItem
-        key="user-avatar-menu-logout"
+        key="suporte"
         onClick={onFalarComSuporte}
         sx={{ display: 'flex', alignItems: 'center', gap: 1 }}
       >

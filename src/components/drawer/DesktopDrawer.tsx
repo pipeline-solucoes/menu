@@ -524,9 +524,9 @@ const DesktopDrawer: React.FC<DrawerProps> = ({
             )}
 
             <Box height="24px" />
-            {onFalarComSuporte &&
-              <ListItem key="suporte" disablePadding sx={{ display: 'block' }}>
-                  {renderWithTooltip(
+            
+            <ListItem key="suporte" disablePadding sx={{ display: 'block' }}>
+                {renderWithTooltip(
                     "Precisa de ajuda?",
                     <ListItemButton
                       onClick={onFalarComSuporte}                    
@@ -549,8 +549,8 @@ const DesktopDrawer: React.FC<DrawerProps> = ({
                       <ListItemText primary="Precisa de ajuda?" sx={{ opacity: open ? 1 : 0 }} />
                     </ListItemButton>
                 )}
-              </ListItem>
-            }
+            </ListItem>
+            
 
             <ListItem key="logout" disablePadding sx={{ display: 'block' }}>
               {renderWithTooltip(
