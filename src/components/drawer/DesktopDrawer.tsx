@@ -21,6 +21,8 @@ import { LogoutIcon } from './LogoutIcon';
 import IconDrawerTrigger from './IconDrawerTrigger';
 import UserAvatarMenu from './UserAvatarMenu';
 import { useConfirmMessage } from '@pipelinesolucoes/notification';
+import RecordVoiceOverIcon from '@mui/icons-material/RecordVoiceOver';
+import { SupportIcon } from './SuportIcon';
 
 const drawerWidth = 240;
 
@@ -255,6 +257,8 @@ const DesktopDrawer: React.FC<DrawerProps> = ({
 
   backgrondToolTip,
   colorToolTip,
+
+  onFalarComSuporte,
  
 }) => {
   const theme = useTheme();
@@ -348,6 +352,7 @@ const DesktopDrawer: React.FC<DrawerProps> = ({
 
         <AppBar position="fixed" open={open} background={backgroundHeader} height={heightHeader}>
           <Toolbar sx={{boxShadow:'none', borderBottom: `1px solid ${theme.palette.divider}`}}>
+            
             <IconButton
               aria-label="open drawer"
               onClick={handleDrawerOpen}
@@ -378,6 +383,7 @@ const DesktopDrawer: React.FC<DrawerProps> = ({
                   userEmail={emailUsuario}
                   menuItems={avatarMenuItems}
                   endPointLogout={endPointLogout}
+                  onFalarComSuporte={onFalarComSuporte}
                 />
               </IconDrawerTrigger>
             </ToolbarContent>
@@ -519,6 +525,33 @@ const DesktopDrawer: React.FC<DrawerProps> = ({
             )}
 
             <Box height="24px" />
+            {onFalarComSuporte &&
+              <ListItem key="suporte" disablePadding sx={{ display: 'block' }}>
+                  {renderWithTooltip(
+                    "Falar com o suporte",
+                    <ListItemButton
+                      onClick={onFalarComSuporte}                    
+                      sx={{ 
+                        minHeight: 48, px: 2.5,
+                        justifyContent: open ? 'initial' : 'center',
+                        color: colorItemMenu,
+                      }}
+                    >
+                      <ListItemIcon
+                        sx={{
+                          minWidth: 0,
+                          justifyContent: 'center',
+                          mr: open ? 3 : 'auto',
+                          color: colorItemMenu,
+                        }}
+                      >
+                        <RecordVoiceOverIcon />
+                      </ListItemIcon>
+                      <ListItemText primary="Falar com o suporte" sx={{ opacity: open ? 1 : 0 }} />
+                    </ListItemButton>
+                )}
+              </ListItem>
+            }
 
             <ListItem key="logout" disablePadding sx={{ display: 'block' }}>
               {renderWithTooltip(
@@ -540,7 +573,7 @@ const DesktopDrawer: React.FC<DrawerProps> = ({
                         color: colorItemMenu,
                       }}
                     >
-                      <LogoutIcon />
+                      <SupportIcon />
                     </ListItemIcon>
                     <ListItemText primary="Sair" sx={{ opacity: open ? 1 : 0 }} />
                   </ListItemButton>

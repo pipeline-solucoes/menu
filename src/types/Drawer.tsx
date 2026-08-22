@@ -115,4 +115,5 @@ export interface DrawerProps {
   colorToolTip?: string;
 
   onUnauthenticated?: () => void;
+  onFalarComSuporte?: () => void;
 }

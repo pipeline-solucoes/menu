@@ -65,6 +65,7 @@ const DrawerResponsive: React.FC<DrawerProps> = ({
   
   onUnauthenticated,
   onTabChange,
+  onFalarComSuporte,
 }) => {
   const defaultAvatar = '/nofoto.jpg';
   const avatarSrc =
@@ -133,6 +134,7 @@ const DrawerResponsive: React.FC<DrawerProps> = ({
         loadingSpinnerSize={sizeLoading}
         loadingMessage={loadingMessage}
         loadingColor={cLoading}
+        onFalarComSuporte={onFalarComSuporte}
       />
     );
   }
@@ -177,6 +179,8 @@ const DrawerResponsive: React.FC<DrawerProps> = ({
 
       backgrondToolTip={bToolTip}
       colorToolTip={cToolTip}
+
+      onFalarComSuporte={onFalarComSuporte}
     />
   );
 };

@@ -126,7 +126,8 @@ const MobileDrawer: React.FC<DrawerProps> = ({
   loadingMessage,
   loadingColor = '#ffffff',
   heightHeader = '72px',
-  headerDrawerContent
+  headerDrawerContent,
+  onFalarComSuporte,
 }) => {
 
   const theme = useTheme()
@@ -192,6 +193,7 @@ const MobileDrawer: React.FC<DrawerProps> = ({
                   userEmail={emailUsuario}
                   menuItems={avatarMenuItems}
                   endPointLogout={endPointLogout}
+                  onFalarComSuporte={onFalarComSuporte}
                 />
               </IconDrawerTrigger>
             </ToolbarContent>

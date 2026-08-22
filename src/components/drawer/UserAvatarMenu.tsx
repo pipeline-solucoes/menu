@@ -5,6 +5,7 @@ import { styled } from '@mui/material/styles';
 import { LogoutIcon } from './LogoutIcon';
 import { AvatarMenuItem } from '@/types/Drawer';
 import { useConfirmMessage } from '@pipelinesolucoes/notification';
+import { SupportIcon } from './SuportIcon';
 
 
 export interface UserAvatarMenuProps {
@@ -15,6 +16,7 @@ export interface UserAvatarMenuProps {
   endPointLogout: string;
   noUserLabel?: string;
   noEmailLabel?: string;
+  onFalarComSuporte?: () => void;
 }
 
 const Root = styled(Box, {
@@ -110,6 +112,7 @@ const UserAvatarMenu: React.FC<UserAvatarMenuProps> = ({
   endPointLogout,
   noUserLabel = 'Nenhum usuário logado',
   noEmailLabel = 'Email não cadastrado',
+  onFalarComSuporte,
 }) => {
 
   const { confirm, ConfirmMessagePortal } = useConfirmMessage();
@@ -117,6 +120,7 @@ const UserAvatarMenu: React.FC<UserAvatarMenuProps> = ({
 
 
   const [errorMsg, setErrorMsg] = React.useState<string | null>(null);
+
   const handleClickLogout = async () => {
     setErrorMsg(null);    
     try {
@@ -155,6 +159,14 @@ const UserAvatarMenu: React.FC<UserAvatarMenuProps> = ({
             {item.label}
           </MenuItem>
         ))}
+
+      <MenuItem
+        key="user-avatar-menu-logout"
+        onClick={onFalarComSuporte}
+        sx={{ display: 'flex', alignItems: 'center', gap: 1 }}
+      >
+        <SupportIcon sx={{ fontSize: 20 }} /> Sair
+      </MenuItem>  
 
       <MenuItem
         key="user-avatar-menu-logout"
