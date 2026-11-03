@@ -27,7 +27,9 @@ const StyledHeader = styled(MuiAppBar, {
 
 const StyledBottomBar = styled(BottomNavigation, {
   shouldForwardProp: (prop) =>
-    !['background', 'color', 'colorSelected', 'height'].includes(prop as string),
+    !['background', 'color', 'colorSelected', 'height'].includes(
+      prop as string,
+    ),
 })<{
   background: string;
   color: string;
@@ -43,11 +45,33 @@ const StyledBottomBar = styled(BottomNavigation, {
   borderTop: `1px solid ${theme.palette.divider}`,
 
   '& .MuiBottomNavigationAction-root': {
-    color: color,
+    color,
     minWidth: 56,
+
+    '&.Mui-selected': {
+      color: colorSelected,
+    },
+
+    '& .MuiBottomNavigationAction-label': {
+      color: 'inherit',
+    },
+
+    '& .MuiSvgIcon-root': {
+      color: 'inherit',
+    },
   },
-  '& .Mui-selected': {
-    color: colorSelected,
+
+  '& .MuiBottomNavigationAction-label': {
+    color: 'inherit',
+    fontSize: '0.7rem',
+    fontWeight: 500,
+    lineHeight: 1.2,
+    textTransform: 'none',
+
+    '&.Mui-selected': {
+      fontSize: '0.7rem',
+      fontWeight: 700,
+    },
   },
 }));
 
@@ -56,7 +80,7 @@ const ToolbarContent = styled('div')(() => ({
   alignItems: 'center',
   justifyContent: 'end',
   width: '100%',
-  gap: '16px',
+  gap: '32px',
 }));
 
 const LoadingOverlay = styled('div', {
@@ -178,6 +202,13 @@ const MobileDrawer: React.FC<DrawerProps> = ({
                 {headerDrawerContent && headerDrawerContent}
               </Box>
               {toolbarContent}
+              <UserAvatarMenu
+                userName={nomeUsuarioLogado}
+                userEmail={emailUsuario}
+                menuItems={avatarMenuItems}
+                endPointLogout={endPointLogout}
+                onFalarComSuporte={onFalarComSuporte}
+              />
               <IconDrawerTrigger
                 background={backgroundMenuAvatar}
                 icon={
