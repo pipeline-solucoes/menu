@@ -26,7 +26,7 @@ const Root = styled(Box, {
 }>(({ hasMenuItems }) => ({
   display: 'flex',
   flexDirection: 'column',
-  gap: hasMenuItems ? 16 : 12,
+  gap: hasMenuItems ? 0 : 12,
 }));
 
 const UserInfoWrapper = styled(Box)(() => ({

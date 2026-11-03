@@ -53,6 +53,7 @@ const StyledBottomBar = styled(BottomNavigation, {
 
     '&.Mui-selected': {
       color: colorSelected,
+      borderBottom: `4px solid ${colorSelected}`
     },
 
     '& .MuiBottomNavigationAction-label': {
@@ -219,7 +220,7 @@ const MobileDrawer: React.FC<DrawerProps> = ({
                     height: 44,
                   }}
                 >
-                  <SupportIcon sx={{ fontSize: 20 }} />
+                  <SupportIcon sx={{ fontSize: 20 }} /> Precisa de ajuda?
                 </IconButton>
               </Tooltip>
           

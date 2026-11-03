@@ -101,7 +101,7 @@ const DrawerResponsive: React.FC<DrawerProps> = ({
   const bMenuAvatar = backgroundMenuAvatar ?? themeDrawer?.menuAvatar?.background ?? '#fff';
 
   const cItemMenu = colorItemMenu ?? themeDrawer?.itemMenu?.color ?? '#000';
-  const cItemMenuSelected = colorItemMenuSelected ?? themeDrawer?.itemMenu?.color ?? '#000';
+  const cItemMenuSelected = colorItemMenuSelected ?? themeDrawer?.itemMenu?.colorSelected ?? '#000';
 
   const bToolTip = backgrondToolTip ?? themeDrawer?.tooltip?.background ?? '#000';
   const cToolTip = colorToolTip ?? themeDrawer?.tooltip?.color ?? '#fff';
