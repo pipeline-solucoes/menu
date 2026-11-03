@@ -220,7 +220,18 @@ const MobileDrawer: React.FC<DrawerProps> = ({
                     height: 44,
                   }}
                 >
-                  <SupportIcon sx={{ fontSize: 20 }} /> Precisa de ajuda?
+                  <SupportIcon sx={{ fontSize: 20 }} /> 
+
+                  <Typography
+                    component="span"
+                    sx={{
+                      fontSize: '0.75rem',
+                      fontWeight: 500,
+                      whiteSpace: 'nowrap',
+                    }}
+                  >
+                    Precisa de ajuda?
+                  </Typography>
                 </IconButton>
               </Tooltip>
           
