@@ -8,11 +8,14 @@ import {
   Toolbar,
   Typography,
   CircularProgress,
+  Tooltip,
+  IconButton,
 } from '@mui/material';
 import MuiAppBar from '@mui/material/AppBar';
 import { DrawerProps, MenuItemDrawer } from '@/types/Drawer';
 import IconDrawerTrigger from './IconDrawerTrigger';
 import UserAvatarMenu from './UserAvatarMenu';
+import { SupportIcon } from './SuportIcon';
 
 const StyledHeader = styled(MuiAppBar, {
   shouldForwardProp: (prop) => prop !== 'backgroundHeader',
@@ -71,6 +74,7 @@ const StyledBottomBar = styled(BottomNavigation, {
     '&.Mui-selected': {
       fontSize: '0.7rem',
       fontWeight: 700,
+      color: colorSelected,
     },
   },
 }));
@@ -201,14 +205,24 @@ const MobileDrawer: React.FC<DrawerProps> = ({
               <Box flex="1" alignItems="center" justifyContent="center">
                 {headerDrawerContent && headerDrawerContent}
               </Box>
+
               {toolbarContent}
-              <UserAvatarMenu
-                userName={nomeUsuarioLogado}
-                userEmail={emailUsuario}
-                menuItems={avatarMenuItems}
-                endPointLogout={endPointLogout}
-                onFalarComSuporte={onFalarComSuporte}
-              />
+
+              <Tooltip title="Precisa de ajuda?">
+                <IconButton
+                  aria-label="Falar com o suporte"
+                  onClick={onFalarComSuporte}
+                  sx={{
+                    flexShrink: 0,
+                    color: 'text.primary',
+                    width: 44,
+                    height: 44,
+                  }}
+                >
+                  <SupportIcon sx={{ fontSize: 20 }} />
+                </IconButton>
+              </Tooltip>
+          
               <IconDrawerTrigger
                 background={backgroundMenuAvatar}
                 icon={
