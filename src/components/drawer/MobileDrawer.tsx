@@ -216,16 +216,19 @@ const MobileDrawer: React.FC<DrawerProps> = ({
                   sx={{
                     flexShrink: 0,
                     color: 'text.primary',
-                    width: 44,
+                    width: 'auto',
                     height: 44,
+                    px: 1,
+                    gap: 0.5,
+                    borderRadius: 1,
                   }}
                 >
-                  <SupportIcon sx={{ fontSize: 20 }} /> 
+                  <SupportIcon sx={{ fontSize: 20 }} />
 
                   <Typography
                     component="span"
                     sx={{
-                      fontSize: '0.75rem',
+                      fontSize: '12px',
                       fontWeight: 500,
                       whiteSpace: 'nowrap',
                     }}
